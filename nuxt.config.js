@@ -28,13 +28,15 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '@fortawesome/fontawesome-free/css/all.min.css'
+    '@fortawesome/fontawesome-free/css/all.min.css',
+    'node_modules/bootstrap/dist/css/bootstrap.min.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/leaflet', ssr: false }
   ],
 
   /*
@@ -61,7 +63,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      
+
     }
   }
 }
