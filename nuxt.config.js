@@ -3,6 +3,9 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
+  server: {
+    port: 5000
+  },
 
   /*
   ** Headers of the page
@@ -15,7 +18,10 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    ],
+    script: [
+      { src: "http://localhost:8098" }
     ]
   },
 

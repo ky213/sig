@@ -11,7 +11,7 @@
     >
       <div>
         <h1 class="display-1 text-center">S I G</h1>
-        <h1 class="display-4 text-center">system d'information geographique</h1>
+        <h1 class="display-4 text-center">system d'information géographique</h1>
       </div>
       <router-link to="/viewer" class="mt-5">
         <button type="button" class="btn btn-primary btn-lg">

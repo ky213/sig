@@ -1,8 +1,8 @@
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item has-text-grey-darker" href="https://eadn.dz" target="_blank">
-        <b style="font-size:2em" class="is-danger">SIGEADN</b>
+      <a class="navbar-item has-text-grey-darker" href="#">
+        <b style="font-size:2em" class="is-danger">CARTADZ</b>
       </a>
       
       <a
@@ -29,7 +29,7 @@
         </nuxt-link>
 
         <nuxt-link class="navbar-item" to="/dashboard">
-          <b-icon pack="fas" icon="cog" style="margin-right:5px"/>Dashboard
+          <b-icon pack="fas" icon="cog" style="margin-right:5px"/>Administration
         </nuxt-link>
       </div>
 
