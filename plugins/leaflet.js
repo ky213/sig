@@ -18,7 +18,6 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet-geosearch/dist/style.css'
 import 'leaflet-geosearch/assets/css/leaflet.css'
 
-
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -29,80 +28,78 @@ L.Icon.Default.mergeOptions({
 
 const leaflet = {
     install(V, options) {
-        //         V.component("leaflet", {
-        //             render(h) {
-        //                 return <div id="map" style="height:100%">{this.$slots.default}</div>
-        //             },
-        //             mounted() {
-        //                 V.prototype.$map = L.map("map", { editable: true, maxZoom: 18 }).setView([31.5, 3], 5)
+        V.component("leaflet", {
+            render(h) {
+                return <div id="map" style="height:100%">{this.$slots.default}</div>
+            },
+            mounted() {
+                V.prototype.$map = L.map("map", { editable: true, maxZoom: 18 }).setView([31.5, 3], 5)
 
-        //                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        //                 }).addTo(this.$map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(this.$map);
 
-        //                 V.prototype.$DrawLayer = L.geoJSON().addTo(this.$map)
+                V.prototype.$DrawLayer = L.geoJSON().addTo(this.$map)
 
-        //                 V.prototype.$searchControl = new GeoSearchControl({
-        //                     provider: new OpenStreetMapProvider(),
-        //                     style: "bar",
-        //                     showPopup: true,
-        //                     autoClose: true,
-        //                     keepResult: true
-        //                 }).addTo(this.$map);
+                V.prototype.$searchControl = new GeoSearchControl({
+                    provider: new OpenStreetMapProvider(),
+                    style: "bar",
+                    showPopup: true,
+                    autoClose: true,
+                    keepResult: true
+                }).addTo(this.$map);
 
-        //                 V.prototype.$cluster = L.markerClusterGroup.layerSupport().addTo(this.$map);
+                V.prototype.$cluster = L.markerClusterGroup.layerSupport().addTo(this.$map);
 
-        //                 V.prototype.$BaseMap = new L.control.layers({
-        //                     "OpenStreetMap": L.tileLayer(
-        //                         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        //                         {
-        //                             attribution:
-        //                                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        //                         }
-        //                     ).addTo(this.$map)
-        //                     ,
-        //                     "ESRI": L.tileLayer(
-        //                         "https://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}",
-        //                         { variant: "World_Street_Map" }
-        //                     ),
-        //                     "MapBox": L.tileLayer(
-        //                         "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}{r}.png?access_token={accessToken}",
-        //                         {
-        //                             id: "mapbox.streets",
-        //                             accessToken:
-        //                                 "pk.eyJ1Ijoia3kyMTMiLCJhIjoiY2pxZTg4YzNwMW5oNjN4bW4wamlob280ciJ9.qpO_NOa2wR3aZruBFufNjA"
-        //                         }
-        //                     )
-        //                 }, {
+                V.prototype.$BaseMap = new L.control.layers({
+                    "OpenStreetMap": L.tileLayer(
+                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        {
+                            attribution:
+                                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }
+                    ).addTo(this.$map)
+                    ,
+                    "ESRI": L.tileLayer(
+                        "https://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}",
+                        { variant: "World_Street_Map" }
+                    ),
+                    "MapBox": L.tileLayer(
+                        "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}{r}.png?access_token={accessToken}",
+                        {
+                            id: "mapbox.streets",
+                            accessToken:
+                                "pk.eyJ1Ijoia3kyMTMiLCJhIjoiY2pxZTg4YzNwMW5oNjN4bW4wamlob280ciJ9.qpO_NOa2wR3aZruBFufNjA"
+                        }
+                    )
+                }).addTo(this.$map)
 
-        //                     }).addTo(this.$map)
+                V.prototype.$drawControl = new L.Control.Draw({
+                    edit: false,
+                    draw: {
+                        circle: false,
+                        circlemarker: false,
+                        rectangle: false
+                    }
+                }).addTo(this.$map);
 
-        //                 V.prototype.$drawControl = new L.Control.Draw({
-        //                     edit: false,
-        //                     draw: {
-        //                         circle: false,
-        //                         circlemarker: false,
-        //                         rectangle: false
-        //                     }
-        //                 }).addTo(this.$map);
+                V.prototype.$print = L.easyPrint({
+                    title: 'print',
+                    position: 'topleft',
+                    sizeModes: ['A4Portrait', 'A4Landscape'],
+                    exportOnly: true
+                }).addTo(this.$map);
 
-        //                 V.prototype.$print = L.easyPrint({
-        //                     title: 'print',
-        //                     position: 'topleft',
-        //                     sizeModes: ['A4Portrait', 'A4Landscape'],
-        //                     exportOnly: true
-        //                 }).addTo(this.$map);
-
-        //                 this.$map.on("draw:created", ({ layer }) => {
-        //                     if (!("feature" in layer)) {
-        //                         layer.featureType = "";
-        //                         layer.feature = layer.toGeoJSON();
-        //                     }
-        //                     this.$DrawLayer.addLayer(layer);
-        //                     // this.addNewFeature(layer);
-        //                 });
-        //             }
-        //         })
+                this.$map.on("draw:created", ({ layer }) => {
+                    if (!("feature" in layer)) {
+                        layer.featureType = "";
+                        layer.feature = layer.toGeoJSON();
+                    }
+                    this.$DrawLayer.addLayer(layer);
+                    // this.addNewFeature(layer);
+                });
+            }
+        })
     }
 }
 
