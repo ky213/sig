@@ -89,15 +89,6 @@ const leaflet = {
                     sizeModes: ['A4Portrait', 'A4Landscape'],
                     exportOnly: true
                 }).addTo(this.$map);
-
-                this.$map.on("draw:created", ({ layer }) => {
-                    if (!("feature" in layer)) {
-                        layer.featureType = "";
-                        layer.feature = layer.toGeoJSON();
-                    }
-                    this.$DrawLayer.addLayer(layer);
-                    // this.addNewFeature(layer);
-                });
             }
         })
     }

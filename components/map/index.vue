@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import * as icons from '@/assets/icons'
 import { mapState } from 'vuex'
 
 export default {
@@ -12,15 +13,17 @@ export default {
   computed: mapState(['features', 'schemas']),
   methods: {
     createLayerGroup(schema) {
+      const iconUrl = icons.default[`${schema.name}`]
+
       this.$data.layerGroups[`${schema.name}`] = L.geoJSON(null, {
         pointToLayer: (feature, latlng) => {
-          //   const icon = L.icon({
-          //     // iconUrl: icons.default.msan,
-          //     iconSize: [48, 70],
-          //     popupAnchor: [0, -32]
-          //   })
+          const icon = L.icon({
+            iconUrl,
+            iconSize: [48, 70],
+            popupAnchor: [0, -32]
+          })
           return L.marker(latlng, {
-            // icon
+            icon
           })
         },
         onEachFeature: (feature, layer) => {
@@ -33,13 +36,13 @@ export default {
               {
                 index: 0,
                 text: 'Edit',
-                // icon: icons.default.edit,
+                icon: icons.default.edit,
                 callback: this.editLayer
               },
               {
                 index: 1,
                 text: 'Delete',
-                // icon: icons.default.del,
+                icon: icons.default.del,
                 callback: this.deleteLayer
               }
             ]
@@ -75,7 +78,16 @@ export default {
     this.schemas.schemas.forEach(schema => this.createLayerGroup(schema))
     this.features.features.forEach(feature =>
       this.layerGroups[`${feature.schema}`].addData(feature)
-    )
+    ),
+      this.$map.on('draw:created', ({ layer }) => {
+        if (!('feature' in layer)) {
+          layer.featureType = ''
+          layer.feature = layer.toGeoJSON()
+        }
+        this.$DrawLayer.addLayer(layer)
+        this.$emit('newLayer', layer)
+        // this.addNewFeature(layer);
+      })
   }
 }
 </script>
