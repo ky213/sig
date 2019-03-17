@@ -40,7 +40,7 @@
                 @click="onTypeSelect"
                 :disabled="schema.topo !== newLayer.feature.geometry.type"
               >
-                <img :src="`/icons/${schema.name}.png`" style="height:70px">
+                <img :src="`/icons/${schema.name}.png`" style="height:40px">
               </button>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default {
       isLoading: false
     }
   },
-  props: ['newLayer'],
+  props: ['newLayer', 'editLayer'],
   computed: {
     ...mapState({ schemas: state => state.schemas.schemas }),
     activeSchema() {
@@ -161,9 +161,6 @@ export default {
 
 .schema-icon:not(:disabled) {
   cursor: pointer;
-  img {
-    height: 70px;
-  }
   &:hover {
     border: 1px solid #dbdbdb;
   }

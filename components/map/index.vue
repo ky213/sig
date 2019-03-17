@@ -72,11 +72,11 @@ export default {
       return popup
     },
     editLayer({ relatedTarget }) {
-      const options = this.newFeature.options
+      const options = relatedTarget.options
 
-      if (options && options.contextmenu) this.newFeature.disableEdit()
-      this.addNewFeature(relatedTarget)
-      this.newFeature.enableEdit()
+      if (options && options.contextmenu) relatedTarget.disableEdit()
+      relatedTarget.enableEdit()
+      this.$emit('edit', relatedTarget)
     },
     deleteLayer({ relatedTarget }) {
       this.$confirm({
@@ -150,5 +150,11 @@ export default {
   form {
     width: 35%;
   }
+}
+
+.leaflet-marker-draggable {
+  border: 4px dashed rgba(243, 66, 75, 0.89);
+  border-radius: 10%;
+  padding: 4px;
 }
 </style>

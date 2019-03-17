@@ -1,13 +1,14 @@
 <template>
   <div class="h-100">
     <no-ssr>
-      <Map @newLayer="onNewLayer"/>
+      <Map @newLayer="onNewLayer" @edit="onEdit"/>
     </no-ssr>
     <FeatureSettings
       v-if="showFeatureSettings"
       @save="showFeatureSettings=false"
       @cancel="showFeatureSettings=false"
       :newLayer="newLayer"
+      :editLayer="editLayer"
     />
   </div>
 </template>
@@ -20,7 +21,8 @@ export default {
   data() {
     return {
       showFeatureSettings: false,
-      newLayer: null
+      newLayer: null,
+      editLayer: null
     }
   },
   components: { Map, FeatureSettings },
@@ -28,6 +30,10 @@ export default {
     onNewLayer(layer) {
       this.showFeatureSettings = true
       this.newLayer = layer
+    },
+    onEdit(layer) {
+      this.newLayer = layer
+      this.showFeatureSettings = true
     }
   }
 }
