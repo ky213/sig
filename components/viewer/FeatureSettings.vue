@@ -36,11 +36,11 @@
               <button
                 type="button"
                 :name="schema.name"
-                class="btn"
+                class="btn schema-icon"
                 @click="onTypeSelect"
-                disabled
+                :disabled="schema.topo !== newLayer.feature.geometry.type"
               >
-                <img :src="`/icons/${schema.name}.png`">
+                <img :src="`/icons/${schema.name}.png`" style="height:70px">
               </button>
             </div>
           </div>
@@ -159,9 +159,7 @@ export default {
   height: 50px !important;
 }
 
-.schema-icon {
-  padding: 5px;
-  border-radius: 5px;
+.schema-icon:not(:disabled) {
   cursor: pointer;
   img {
     height: 70px;
@@ -169,5 +167,8 @@ export default {
   &:hover {
     border: 1px solid #dbdbdb;
   }
+}
+.schema-icon:disabled {
+  cursor: not-allowed !important;
 }
 </style>
