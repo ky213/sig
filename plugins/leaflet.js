@@ -89,6 +89,8 @@ const leaflet = {
                     sizeModes: ['A4Portrait', 'A4Landscape'],
                     exportOnly: true
                 }).addTo(this.$map);
+
+                V.prototype.$layerGroups = {}
             }
         })
     }

@@ -19,9 +19,10 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Righteous" }
     ],
     script: [
-      { src: "http://localhost:8098" }
+      // { src: "http://localhost:8098" }
     ]
   },
 
@@ -34,15 +35,18 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'ant-design-vue/dist/antd.min.css',
     '@fortawesome/fontawesome-free/css/all.min.css',
     'node_modules/bootstrap/dist/css/bootstrap.min.css'
+
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/leaflet', ssr: false }
+    { src: '~/plugins/leaflet', ssr: false },
+    { src: '~/plugins/antd' }
   ],
 
   /*

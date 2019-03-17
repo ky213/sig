@@ -23,7 +23,6 @@
 </template>
  
  <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Righteous');
 .home {
   background: #e0eafc;
   background: linear-gradient(

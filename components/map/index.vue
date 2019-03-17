@@ -3,19 +3,17 @@
 </template>
 
 <script>
+import axios from 'axios'
 import * as icons from '@/assets/icons'
 import { mapState } from 'vuex'
 
 export default {
-  data() {
-    return { layerGroups: {} }
-  },
   computed: mapState(['features', 'schemas']),
   methods: {
     createLayerGroup(schema) {
       const iconUrl = icons.default[`${schema.name}`]
 
-      this.$data.layerGroups[`${schema.name}`] = L.geoJSON(null, {
+      this.$layerGroups[`${schema.name}`] = L.geoJSON(null, {
         pointToLayer: (feature, latlng) => {
           const icon = L.icon({
             iconUrl,
@@ -27,7 +25,7 @@ export default {
           })
         },
         onEachFeature: (feature, layer) => {
-          layer.featureType = 'msan'
+          layer.featureType = schema.name
           layer.bindPopup(this.setPopUp(feature.properties))
           layer.bindContextMenu({
             contextmenu: true,
@@ -51,7 +49,7 @@ export default {
       }).addTo(this.$cluster)
 
       this.$BaseMap.addOverlay(
-        this.layerGroups[`${schema.name}`],
+        this.$layerGroups[`${schema.name}`],
         `${schema.name}`
       )
     },
@@ -72,13 +70,54 @@ export default {
         popup += `<h5><b>${prop}</b>: ${props[prop]}</h5>`
       }
       return popup
+    },
+    editLayer({ relatedTarget }) {
+      const options = this.newFeature.options
+
+      if (options && options.contextmenu) this.newFeature.disableEdit()
+      this.addNewFeature(relatedTarget)
+      this.newFeature.enableEdit()
+    },
+    deleteLayer({ relatedTarget }) {
+      this.$confirm({
+        title: 'Are you sure delete this feature?',
+        content:
+          'this action will delete the feature locally and from the databse if any',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk: () => {
+          this.$layerGroups[relatedTarget.featureType].removeLayer(
+            relatedTarget
+          )
+          if (relatedTarget.feature._id) this.deletFeatureFromDB(relatedTarget)
+        },
+        onCancel: () => {}
+      })
+    },
+    deletFeatureFromDB({ feature, featureType }) {
+      axios({
+        method: 'delete',
+        url: `http://localhost:3000/collections/${featureType}/${feature._id}`
+      })
+        .then(() => {
+          this.$notification.success({
+            message: 'Success!',
+            description: 'Deleted from database'
+          })
+        })
+        .catch(e => {
+          this.$notification.error({
+            message: 'Error: deleting from database',
+            description: e.message
+          })
+        })
     }
   },
   mounted() {
-    this.$root.layerGroups = this.layerGroups
     this.schemas.schemas.forEach(schema => this.createLayerGroup(schema))
     this.features.features.forEach(feature =>
-      this.layerGroups[`${feature.schema}`].addData(feature)
+      this.$layerGroups[`${feature.schema}`].addData(feature)
     ),
       this.$map.on('draw:created', ({ layer }) => {
         if (!('feature' in layer)) {
@@ -88,6 +127,14 @@ export default {
         this.$DrawLayer.addLayer(layer)
         this.$emit('newLayer', layer)
       })
+
+    this.$map.on('contextmenu.show', ({ contextmenu }) => {
+      if (contextmenu._items.length > 2) this.$map.contextmenu.hide()
+    })
+
+    this.$map.on('click', () => {
+      this.$map.contextmenu.hide()
+    })
   }
 }
 </script>

@@ -33,12 +33,15 @@
           </div>
           <div class="card-content">
             <div class="content">
-              <img
+              <button
+                type="button"
                 :name="schema.name"
-                :src="`/icons/${schema.name}.png`"
-                class="schema-icon"
+                class="btn"
                 @click="onTypeSelect"
+                disabled
               >
+                <img :src="`/icons/${schema.name}.png`">
+              </button>
             </div>
           </div>
         </b-collapse>
@@ -92,6 +95,7 @@ export default {
   },
   methods: {
     onTypeSelect(e) {
+      this.newLayer.featureType = e.target.name
       this.selectedType = e.target.name
       this.activeTab = 1
       if (this.newLayer.feature.geometry.type === 'Point')
@@ -133,11 +137,10 @@ export default {
             type: 'is-success'
           })
           this.newLayer.feature._id = _id
-          this.$map.removeLayer(this.newLayer)
-          this.$root.layerGroups[this.selectedType].addLayer(this.newLayer)
-          this.newLayer
-            .bindPopup(this.setPopup(this.newLayer.feature.properties))
-            .openPopup()
+          this.$DrawLayer.removeLayer(this.newLayer)
+          this.$root.layerGroups[this.selectedType].addData(
+            this.newLayer.feature
+          )
         })
         .catch(error => {
           this.isLoading = false
@@ -146,23 +149,6 @@ export default {
             type: 'is-danger'
           })
         })
-    },
-    setPopup(props) {
-      let popup = ``
-
-      for (const prop in props) {
-        if (prop == 'image' || prop == '_id') continue
-        if (prop == 'liaison_fo') {
-          popup += `<h5><b>${prop}: </b></h5>`
-          for (const el of props[prop]) {
-            popup += `<h6><b>${el.trans || 'Tr'}: </b>${el.distanceKM ||
-              null} km</h6>`
-          }
-          continue
-        }
-        popup += `<h5><b>${prop}</b>: ${props[prop]}</h5>`
-      }
-      return popup
     }
   }
 }
@@ -174,10 +160,12 @@ export default {
 }
 
 .schema-icon {
-  height: 70px;
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
+  img {
+    height: 70px;
+  }
   &:hover {
     border: 1px solid #dbdbdb;
   }
