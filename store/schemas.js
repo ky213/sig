@@ -1,16 +1,16 @@
 export const state = () => ({
     schemas: {},
+    layerGroups: []
 })
 
 export const mutations = {
     add(state, payload) {
         state.schemas = payload
     },
-    names(state, payload) {
-        state.names = payload
+    addLayerGroup(state, payload) {
+        state.layerGroups.push(payload)
     }
 }
-
 
 export const getters = {
     names(state) {

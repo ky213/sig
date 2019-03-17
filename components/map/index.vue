@@ -75,6 +75,7 @@ export default {
     }
   },
   mounted() {
+    this.$root.layerGroups = this.layerGroups
     this.schemas.schemas.forEach(schema => this.createLayerGroup(schema))
     this.features.features.forEach(feature =>
       this.layerGroups[`${feature.schema}`].addData(feature)
@@ -86,12 +87,10 @@ export default {
         }
         this.$DrawLayer.addLayer(layer)
         this.$emit('newLayer', layer)
-        // this.addNewFeature(layer);
       })
   }
 }
 </script>
-
 
 <style lang="scss">
 .leaflet-control-geosearch.bar {

@@ -5,6 +5,7 @@
     class="card position-absolute bg-white p-3 rounded-1"
     style="width:30%;top:200px;right:15px;z-index:400"
     @submit.prevent="onSubmit"
+    @reset="onReset"
   >
     <b-tabs v-model="activeTab">
       <b-tab-item>
@@ -53,10 +54,13 @@
       </b-tab-item>
     </b-tabs>
     <footer class="card-footer bg-white">
-      <button typ="submit" href="#" class="button is-info is-medium card-footer-item">Save
+      <button
+        typ="submit"
+        :class="['button', 'is-info', 'is-medium', 'card-footer-item',{'is-loading':isLoading}]"
+      >Save
         <b-icon pack="fas" icon="cloud-upload-alt" class="ml-2" size="is-small"></b-icon>
       </button>
-      <button href="#" class="button is-danger is-outlined is-medium card-footer-item">Cancel
+      <button type="reset" class="button is-danger is-outlined is-medium card-footer-item">Cancel
         <b-icon pack="fas" icon="times" class="ml-2" size="is-small"></b-icon>
       </button>
     </footer>
@@ -64,15 +68,18 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState } from 'vuex'
-
+import * as icons from '~/assets/icons'
 export default {
   data() {
     return {
       selectedType: '',
-      activeTab: 0
+      activeTab: 0,
+      isLoading: false
     }
   },
+  props: ['newLayer'],
   computed: {
     ...mapState({ schemas: state => state.schemas.schemas }),
     activeSchema() {
@@ -87,9 +94,75 @@ export default {
     onTypeSelect(e) {
       this.selectedType = e.target.name
       this.activeTab = 1
+      if (this.newLayer.feature.geometry.type === 'Point')
+        this.newLayer.setIcon(
+          L.icon({
+            iconUrl: icons.default[this.selectedType],
+            iconSize: [48, 70],
+            popupAnchor: [0, -32]
+          })
+        )
     },
     onSubmit(e) {
-      console.log('submitted', e)
+      const formData = new FormData(e.target)
+      const newFeature = {}
+
+      this.isLoading = true
+      for (const key in this.activeSchema.properties) {
+        newFeature[key] = formData.get(key)
+      }
+
+      this.newLayer.feature.properties = newFeature
+      this.saveFeature()
+    },
+    onReset() {
+      this.$emit('cancel')
+      if (!this.newLayer.feature._id) this.$map.removeLayer(this.newLayer)
+    },
+    saveFeature() {
+      axios({
+        method: 'post',
+        url: `http://localhost:3000/collections/${this.selectedType}`,
+        data: this.newLayer.feature
+      })
+        .then(({ data: { _id } }) => {
+          this.isLoading = false
+          this.$emit('save')
+          this.$toast.open({
+            message: '<b>Success!. Feature saved to database</b>',
+            type: 'is-success'
+          })
+          this.newLayer.feature._id = _id
+          this.$map.removeLayer(this.newLayer)
+          this.$root.layerGroups[this.selectedType].addLayer(this.newLayer)
+          this.newLayer
+            .bindPopup(this.setPopup(this.newLayer.feature.properties))
+            .openPopup()
+        })
+        .catch(error => {
+          this.isLoading = false
+          this.$toast.open({
+            message: `Error! ${error.message}`,
+            type: 'is-danger'
+          })
+        })
+    },
+    setPopup(props) {
+      let popup = ``
+
+      for (const prop in props) {
+        if (prop == 'image' || prop == '_id') continue
+        if (prop == 'liaison_fo') {
+          popup += `<h5><b>${prop}: </b></h5>`
+          for (const el of props[prop]) {
+            popup += `<h6><b>${el.trans || 'Tr'}: </b>${el.distanceKM ||
+              null} km</h6>`
+          }
+          continue
+        }
+        popup += `<h5><b>${prop}</b>: ${props[prop]}</h5>`
+      }
+      return popup
     }
   }
 }
