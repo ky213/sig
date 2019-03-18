@@ -1,4 +1,4 @@
-# nuxt-app
+# SIG-EADN
 
 > nuxt playground
 

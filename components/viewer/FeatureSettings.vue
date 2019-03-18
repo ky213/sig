@@ -3,7 +3,7 @@
   <form
     ref="form"
     class="card position-absolute bg-white p-3 rounded-1"
-    style="width:30%;top:200px;right:15px;z-index:400"
+    style="height:600px;width:30%;top:200px;right:15px;z-index:400"
     @submit.prevent="onSubmit"
     @reset="onReset"
   >
@@ -52,7 +52,7 @@
           <span>Attributes</span>
         </template>
         <b-field v-for="(prop,i) in activeSchema.properties" :key="i" :label="i">
-          <b-input :name="i" :type="prop"></b-input>
+          <b-input :name="i" :type="prop" :value="newLayer.feature.properties[i]"></b-input>
         </b-field>
       </b-tab-item>
     </b-tabs>
@@ -82,13 +82,16 @@ export default {
       isLoading: false
     }
   },
-  props: ['newLayer', 'editLayer'],
+  props: ['newLayer', 'mode'],
   computed: {
     ...mapState({ schemas: state => state.schemas.schemas }),
     activeSchema() {
       return (
         this.schemas
-          .filter(schema => schema.name === this.selectedType)
+          .filter(
+            schema =>
+              schema.name === this.selectedType || this.newLayer.featureType
+          )
           .pop() || {}
       )
     }
@@ -109,14 +112,15 @@ export default {
     },
     onSubmit(e) {
       const formData = new FormData(e.target)
-      const newFeature = {}
+      const newProps = {}
 
       this.isLoading = true
       for (const key in this.activeSchema.properties) {
-        newFeature[key] = formData.get(key)
+        newProps[key] = formData.get(key)
       }
 
-      this.newLayer.feature.properties = newFeature
+      this.newLayer.feature.properties = newProps
+      this.newLayer.feature.geometry.coordinates = this.newLayer.toGeoJSON().geometry.coordinates
       this.saveFeature()
     },
     onReset() {
@@ -124,9 +128,13 @@ export default {
       if (!this.newLayer.feature._id) this.$map.removeLayer(this.newLayer)
     },
     saveFeature() {
+      const method = this.mode === 'create' ? 'post' : 'put'
+      const id = this.mode === 'edit' ? this.newLayer.feature._id : ''
+      const layer = this.selectedType || this.newLayer.featureType
+
       axios({
-        method: 'post',
-        url: `http://localhost:3000/collections/${this.selectedType}`,
+        method,
+        url: `http://localhost:3000/collections/${layer}/${id}`,
         data: this.newLayer.feature
       })
         .then(({ data: { _id } }) => {
@@ -138,9 +146,7 @@ export default {
           })
           this.newLayer.feature._id = _id
           this.$DrawLayer.removeLayer(this.newLayer)
-          this.$root.layerGroups[this.selectedType].addData(
-            this.newLayer.feature
-          )
+          this.$layerGroups[this.selectedType].addData(this.newLayer.feature)
         })
         .catch(error => {
           this.isLoading = false
@@ -154,7 +160,14 @@ export default {
 }
 </script>
 
-<style scoped lang='scss'>
+<style lang='scss'>
+form {
+  .tab-content {
+    height: 425px;
+    overflow: scroll !important;
+  }
+}
+
 .card-header {
   height: 50px !important;
 }

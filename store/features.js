@@ -9,6 +9,9 @@ export const mutations = {
     },
     addNewFeature(state, payload) {
         state.newFeature = payload
+    },
+    flushFeatures(state) {
+        state.features = []
     }
 }
 

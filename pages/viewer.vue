@@ -8,7 +8,7 @@
       @save="showFeatureSettings=false"
       @cancel="showFeatureSettings=false"
       :newLayer="newLayer"
-      :editLayer="editLayer"
+      :mode="mode"
     />
   </div>
 </template>
@@ -22,18 +22,20 @@ export default {
     return {
       showFeatureSettings: false,
       newLayer: null,
-      editLayer: null
+      mode: 'create'
     }
   },
   components: { Map, FeatureSettings },
   methods: {
     onNewLayer(layer) {
       this.showFeatureSettings = true
+      this.mode = 'create'
       this.newLayer = layer
     },
     onEdit(layer) {
-      this.newLayer = layer
       this.showFeatureSettings = true
+      this.mode = 'edit'
+      this.newLayer = layer
     }
   }
 }

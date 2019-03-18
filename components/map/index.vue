@@ -118,15 +118,16 @@ export default {
     this.schemas.schemas.forEach(schema => this.createLayerGroup(schema))
     this.features.features.forEach(feature =>
       this.$layerGroups[`${feature.schema}`].addData(feature)
-    ),
-      this.$map.on('draw:created', ({ layer }) => {
-        if (!('feature' in layer)) {
-          layer.featureType = ''
-          layer.feature = layer.toGeoJSON()
-        }
-        this.$DrawLayer.addLayer(layer)
-        this.$emit('newLayer', layer)
-      })
+    )
+    this.$store.commit('features/flushFeatures')
+    this.$map.on('draw:created', ({ layer }) => {
+      if (!('feature' in layer)) {
+        layer.featureType = ''
+        layer.feature = layer.toGeoJSON()
+      }
+      this.$DrawLayer.addLayer(layer)
+      this.$emit('newLayer', layer)
+    })
 
     this.$map.on('contextmenu.show', ({ contextmenu }) => {
       if (contextmenu._items.length > 2) this.$map.contextmenu.hide()
