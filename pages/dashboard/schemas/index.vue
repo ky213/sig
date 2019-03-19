@@ -2,7 +2,7 @@
   <div class="w-100">
     <Table @newSchema="showModal = true"/>
     <b-modal :active.sync="showModal" has-modal-card>
-      <NewSchema/>
+      <NewSchema @saved="showModal = false"/>
     </b-modal>
   </div>
 </template>

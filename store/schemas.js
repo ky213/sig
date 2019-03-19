@@ -7,13 +7,11 @@ export const mutations = {
     add(state, payload) {
         state.schemas = payload
     },
+    addNewSchema(state, payload) {
+        state.schemas.push(payload)
+    }
+    ,
     addLayerGroup(state, payload) {
         state.layerGroups.push(payload)
-    }
-}
-
-export const getters = {
-    names(state) {
-        return state.schemas.map(({ name }) => name)
     }
 }

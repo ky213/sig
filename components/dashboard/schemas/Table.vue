@@ -14,6 +14,8 @@
       :pagination-simple="isPaginationSimple"
       :default-sort-direction="defaultSortDirection"
       default-sort="user.first_name"
+      :show-detail-icon="true"
+      detailed
     >
       <template slot-scope="props">
         <b-table-column field="name" label="Name" sortable>{{ props.row.name }}</b-table-column>
@@ -26,6 +28,13 @@
             <b-icon class="mr-1" pack="fas" icon="times"/>Delete
           </button>
         </b-table-column>
+      </template>
+
+      <template slot="detail" slot-scope="props">
+        <div v-for="(prop, i) in props.row.properties" :key="i">
+          <b>{{i}}</b>
+          : {{prop}}
+        </div>
       </template>
     </b-table>
   </section>
@@ -49,12 +58,15 @@ export default {
   computed: {
     ...mapState(['schemas']),
     tableData() {
-      return this.schemas.schemas.map(({ name, slug, topo, type }) => ({
-        name,
-        slug,
-        topo,
-        type
-      }))
+      return this.schemas.schemas.map(
+        ({ name, slug, topo, type, properties }) => ({
+          name,
+          slug,
+          topo,
+          type,
+          properties
+        })
+      )
     }
   }
 }

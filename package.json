@@ -28,7 +28,8 @@
     "leaflet.markercluster": "^1.4.1",
     "leaflet.markercluster.layersupport": "^2.0.1",
     "nuxt": "^2.4.0",
-    "nuxt-buefy": "^0.3.2"
+    "nuxt-buefy": "^0.3.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
