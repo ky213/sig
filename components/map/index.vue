@@ -82,7 +82,7 @@ export default {
       this.$confirm({
         title: 'Are you sure delete this feature?',
         content:
-          'this action will delete the feature locally and from the databse if any',
+          'this action will delete the feature locally and from the database if any',
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'No',

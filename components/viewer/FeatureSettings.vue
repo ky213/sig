@@ -126,6 +126,8 @@ export default {
     onReset() {
       this.$emit('cancel')
       if (!this.newLayer.feature._id) this.$map.removeLayer(this.newLayer)
+      if (this.newLayer.options && this.newLayer.options.contextmenu)
+        this.newLayer.disableEdit()
     },
     saveFeature() {
       const method = this.mode === 'create' ? 'post' : 'put'
@@ -138,23 +140,51 @@ export default {
         data: this.newLayer.feature
       })
         .then(({ data: { _id } }) => {
+          const schemaName = this.selectedType || this.newLayer.feature.schema
+
           this.isLoading = false
-          this.$emit('save')
-          this.$toast.open({
-            message: '<b>Success!. Feature saved to database</b>',
-            type: 'is-success'
+          this.$notification.success({
+            message: 'Success!. Feature saved to database'
           })
           this.newLayer.feature._id = _id
-          this.$DrawLayer.removeLayer(this.newLayer)
-          this.$layerGroups[this.selectedType].addData(this.newLayer.feature)
+          if (this.mode === 'create') {
+            this.$DrawLayer.removeLayer(this.newLayer)
+            this.$layerGroups[schemaName].addData(this.newLayer.feature)
+          }
+          if (this.mode === 'edit') {
+            this.newLayer.disableEdit()
+          }
+          this.newLayer.setPopupContent(
+            this.getPopup(this.newLayer.feature.properties)
+          )
+          this.newLayer.openPopup()
+          this.$emit('save')
         })
         .catch(error => {
           this.isLoading = false
-          this.$toast.open({
-            message: `Error! ${error.message}`,
-            type: 'is-danger'
+          this.newLayer.disableEdit()
+          this.$notification.error({
+            message: `Error!`,
+            description: error.message
           })
         })
+    },
+    getPopup(props) {
+      let popup = ``
+
+      for (const prop in props) {
+        if (prop == 'image' || prop == '_id') continue
+        if (prop == 'liaison_fo') {
+          popup += `<h5><b>${prop}: </b></h5>`
+          for (const el of props[prop]) {
+            popup += `<h6><b>${el.trans || 'Tr'}: </b>${el.distanceKM ||
+              null} km</h6>`
+          }
+          continue
+        }
+        popup += `<h5><b>${prop}</b>: ${props[prop]}</h5>`
+      }
+      return popup
     }
   }
 }

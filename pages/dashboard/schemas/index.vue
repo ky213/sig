@@ -31,7 +31,7 @@ export default {
     onDeleteSchema(id) {
       this.$confirm({
         title: 'Are you sure delete this schema?',
-        content: 'this action will delete the schema from  databse.',
+        content: 'this action will delete the schema from  database.',
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'No',

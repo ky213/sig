@@ -5,7 +5,7 @@
     </no-ssr>
     <FeatureSettings
       v-if="showFeatureSettings"
-      @save="showFeatureSettings=false"
+      @save="onSave"
       @cancel="showFeatureSettings=false"
       :newLayer="newLayer"
       :mode="mode"
@@ -35,7 +35,16 @@ export default {
     onEdit(layer) {
       this.showFeatureSettings = true
       this.mode = 'edit'
+      if (
+        this.newLayer &&
+        this.newLayer.options &&
+        this.newLayer.options.contextmenu
+      )
+        this.newLayer.disableEdit()
       this.newLayer = layer
+    },
+    onSave() {
+      this.showFeatureSettings = false
     }
   }
 }
