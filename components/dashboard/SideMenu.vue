@@ -2,7 +2,7 @@
   <a-menu class="h-100" style="width: 256px" mode="vertical">
     <a-menu-item key="1">
       <nuxt-link to="/dashboard/schemas">
-        <b-icon pack="fas" icon="database" style="margin-right:5px"/>Schemas
+        <b-icon pack="fas" icon="database" style="margin-right:5px"/>Layers
       </nuxt-link>
     </a-menu-item>
     <a-menu-item key="2">

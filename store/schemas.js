@@ -1,5 +1,5 @@
 export const state = () => ({
-    schemas: {},
+    schemas: [],
     layerGroups: []
 })
 
@@ -9,9 +9,19 @@ export const mutations = {
     },
     addNewSchema(state, payload) {
         state.schemas.push(payload)
+    },
+    deleteSchema(state, id) {
+        state.schemas = state.schemas.filter(schema => schema._id !== id)
     }
     ,
     addLayerGroup(state, payload) {
         state.layerGroups.push(payload)
+    }
+}
+
+
+export const getters = {
+    names(state) {
+        return state.schemas.map(({ name }) => name)
     }
 }

@@ -21,10 +21,10 @@
         <b-table-column field="name" label="Name" sortable>{{ props.row.name }}</b-table-column>
         <b-table-column field="topo" label="Type" sortable>{{ props.row.topo }}</b-table-column>
         <b-table-column field="edit" label="Edit" sortable>
-          <button class="button is-info is-small">
+          <!-- <button class="button is-info is-small" @click="$emit('editSchema', props.row._id)">
             <b-icon class="mr-1 p-1" pack="fas" icon="edit"/>Edit
-          </button>
-          <button class="button is-danger is-small">
+          </button> -->
+          <button class="button is-danger is-small" @click="$emit('deleteSchema', props.row._id)">
             <b-icon class="mr-1" pack="fas" icon="times"/>Delete
           </button>
         </b-table-column>
@@ -59,7 +59,8 @@ export default {
     ...mapState(['schemas']),
     tableData() {
       return this.schemas.schemas.map(
-        ({ name, slug, topo, type, properties }) => ({
+        ({ _id, name, slug, topo, type, properties }) => ({
+          _id,
           name,
           slug,
           topo,

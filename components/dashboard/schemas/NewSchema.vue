@@ -9,7 +9,7 @@
         <b-field label="Type">
           <b-select name="topo" placeholder="Geometry Type" expanded>
             <option value="Point">Point</option>
-            <option value="LineString">LineString</option>
+            <option value="LineString">Line</option>
             <option value="Plolygon">Polygon</option>
           </b-select>
         </b-field>
@@ -20,7 +20,6 @@
             class="w-100"
             type="text"
             placeholder="prop name"
-            :bind="field.propName"
           ></b-input>
           <b-select name="propType" type="text" placeholder="prop type">
             <option value="number">number</option>
@@ -48,6 +47,7 @@ import uuidv1 from 'uuid'
 import axios from 'axios'
 
 export default {
+  props: ['schemaToEdit'],
   data() {
     return {
       isLoading: false,
@@ -59,7 +59,7 @@ export default {
       const formData = new FormData(e.target)
       const props = formData.getAll('propName')
       const types = formData.getAll('propType')
-      const newSchema = { properties: {} }
+      const newSchema = { type: 'Feature', properties: {} }
 
       this.isLoading = true
 
@@ -78,13 +78,14 @@ export default {
         url: 'http://localhost:3000/schemas',
         data: schema
       })
-        .then(res => {
+        .then(({ data }) => {
           this.$notification.success({
             message: 'Success!',
             description: 'Saved to database'
           })
-          this.isLoading = false
+          schema._id = data._id
           this.$store.commit('schemas/addNewSchema', schema)
+          this.isLoading = false
           this.$emit('saved')
         })
         .catch(error => {

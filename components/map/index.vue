@@ -15,6 +15,7 @@ export default {
 
       this.$layerGroups[`${schema.name}`] = L.geoJSON(null, {
         pointToLayer: (feature, latlng) => {
+          
           const icon = L.icon({
             iconUrl,
             iconSize: [48, 70],
@@ -53,7 +54,6 @@ export default {
         `${schema.name}`
       )
     },
-    spawnLayers(feature) {},
     setPopUp(props) {
       let popup = ``
 
