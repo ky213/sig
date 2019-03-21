@@ -154,10 +154,9 @@ export default {
           if (this.mode === 'edit') {
             this.newLayer.disableEdit()
           }
-          this.newLayer.setPopupContent(
-            this.getPopup(this.newLayer.feature.properties)
-          )
-          this.newLayer.openPopup()
+          this.newLayer
+            .bindPopup(this.getPopup(this.newLayer.feature.properties))
+            .openPopup()
           this.$emit('save')
         })
         .catch(error => {

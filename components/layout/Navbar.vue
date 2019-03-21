@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
+    <div class="navbar-brand align-items-center">
       <a class="navbar-item has-text-grey-darker" href="#">
         <b style="font-size:2em" class="is-danger">CARTADZ</b>
       </a>
@@ -11,6 +11,7 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
+        @click="isActive=!isActive"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -18,7 +19,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div :class="['navbar-menu', {'is-active':isActive}]">
       <div class="navbar-start">
         <nuxt-link class="navbar-item" to="/">
           <b-icon pack="fas" icon="home" style="margin-right:5px"/>Home
@@ -47,8 +48,32 @@
   </nav>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isActive: false
+    }
+  }
+}
+</script>
+
+
 <style scoped>
 a:hover {
   text-decoration: none;
+}
+</style>
+
+<style lang="scss">
+@media (max-width: 1200px) {
+  .navbar-brand {
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+  }
+  .navbar-menu {
+    width: 100%;
+  }
 }
 </style>

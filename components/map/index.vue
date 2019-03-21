@@ -155,7 +155,7 @@ export default {
 
 .leaflet-marker-draggable {
   border: 4px dashed rgba(243, 66, 75, 0.89);
-  border-radius: 10%;
+  border-radius: 5px;
   padding: 4px;
 }
 </style>
