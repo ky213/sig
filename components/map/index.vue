@@ -75,7 +75,6 @@ export default {
       const options = relatedTarget.options
 
       if (options && options.contextmenu) relatedTarget.disableEdit()
-      relatedTarget.enableEdit()
       this.$emit('edit', relatedTarget)
     },
     deleteLayer({ relatedTarget }) {

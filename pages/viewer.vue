@@ -35,12 +35,10 @@ export default {
     onEdit(layer) {
       this.showFeatureSettings = true
       this.mode = 'edit'
-      if (
-        this.newLayer &&
-        this.newLayer.options &&
-        this.newLayer.options.contextmenu
-      )
+      if (this.newLayer && this.newLayer.editEnabled())
         this.newLayer.disableEdit()
+
+      layer.enableEdit()
       this.newLayer = layer
     },
     onSave() {
