@@ -40,7 +40,7 @@
                 @click="onTypeSelect"
                 :disabled="schema.topo !== newLayer.feature.geometry.type"
               >
-                <img :src="`/icons/${schema.name}.png`" style="height:40px">
+                <img :name="schema.name" :src="`/icons/${schema.name}.png`" style="height:40px">
               </button>
             </div>
           </div>
