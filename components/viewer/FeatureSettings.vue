@@ -60,10 +60,12 @@
       <button
         typ="submit"
         :class="['button', 'is-info', 'is-medium', 'card-footer-item',{'is-loading':isLoading}]"
-      >Save
+      >
+        Save
         <b-icon pack="fas" icon="cloud-upload-alt" class="ml-2" size="is-small"></b-icon>
       </button>
-      <button type="reset" class="button is-danger is-outlined is-medium card-footer-item">Cancel
+      <button type="reset" class="button is-danger is-outlined is-medium card-footer-item">
+        Cancel
         <b-icon pack="fas" icon="times" class="ml-2" size="is-small"></b-icon>
       </button>
     </footer>
@@ -126,8 +128,7 @@ export default {
     onReset() {
       this.$emit('cancel')
       if (!this.newLayer.feature._id) this.$map.removeLayer(this.newLayer)
-      if (this.newLayer.options && this.newLayer.options.contextmenu)
-        this.newLayer.disableEdit()
+      if (this.newLayer.editEnabled()) this.newLayer.disableEdit()
     },
     saveFeature() {
       const method = this.mode === 'create' ? 'post' : 'put'
@@ -136,24 +137,24 @@ export default {
 
       axios({
         method,
-        url: `http://localhost:3000/collections/${layer}/${id}`,
+        url: `http://${process.env.HOST}:3000/collections/${layer}/${id}`,
         data: this.newLayer.feature
       })
         .then(({ data: { _id } }) => {
           const schemaName = this.selectedType || this.newLayer.feature.schema
 
+          this.newLayer.feature._id = _id
           this.isLoading = false
           this.$notification.success({
             message: 'Success!. Feature saved to database'
           })
-          this.newLayer.feature._id = _id
+
           if (this.mode === 'create') {
             this.$DrawLayer.removeLayer(this.newLayer)
             this.$layerGroups[schemaName].addData(this.newLayer.feature)
           }
-          if (this.mode === 'edit') {
-            this.newLayer.disableEdit()
-          }
+
+          this.newLayer.disableEdit()
           this.newLayer
             .bindPopup(this.getPopup(this.newLayer.feature.properties))
             .openPopup()

@@ -38,8 +38,8 @@ export default {
       if (this.newLayer && this.newLayer.editEnabled())
         this.newLayer.disableEdit()
 
-      layer.enableEdit()
       this.newLayer = layer
+      this.newLayer.enableEdit()
     },
     onSave() {
       this.showFeatureSettings = false

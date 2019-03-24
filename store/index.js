@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const actions = {
     async nuxtServerInit({ commit }, context) {
-        const { data: { Schemas } } = await axios('http://localhost:3000/schemas')
+        const { data: { Schemas } } = await axios(`http://${process.env.HOST}:3000/schemas`)
         const slugs = Schemas.map(({ slug }) => slug)
-        const requests = slugs.map(slug => () => axios(`http://localhost:3000/collections/${slug}`))
+        const requests = slugs.map(slug => () => axios(`http://${process.env.HOST}:3000/collections/${slug}`))
         const response = await axios.all(requests.map(req => req()))
 
         response.forEach(({ data, request: { path } }) => {

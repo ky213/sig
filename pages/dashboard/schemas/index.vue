@@ -37,7 +37,7 @@ export default {
         cancelText: 'No',
         onOk: () => {
           axios
-            .delete(`http://localhost:3000/schemas/${id}`)
+            .delete(`http://${process.env.HOST}:3000/schemas/${id}`)
             .then(res => {
               this.$store.commit('schemas/deleteSchema', id)
               this.$notification.success({
