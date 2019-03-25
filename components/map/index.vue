@@ -7,6 +7,8 @@ import axios from 'axios'
 import * as icons from '@/assets/icons'
 import { mapState } from 'vuex'
 
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+
 export default {
   computed: mapState(['features', 'schemas']),
   methods: {
@@ -15,7 +17,6 @@ export default {
 
       this.$layerGroups[`${schema.name}`] = L.geoJSON(null, {
         pointToLayer: (feature, latlng) => {
-          
           const icon = L.icon({
             iconUrl,
             iconSize: [48, 70],
@@ -97,7 +98,7 @@ export default {
     deletFeatureFromDB({ feature, featureType }) {
       axios({
         method: 'delete',
-        url: `http://${process.env.HOST}:3000/collections/${featureType}/${feature._id}`
+        url: `http://${host}:3000/collections/${featureType}/${feature._id}`
       })
         .then(() => {
           this.$notification.success({

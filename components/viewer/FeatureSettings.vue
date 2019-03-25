@@ -76,6 +76,9 @@
 import axios from 'axios'
 import { mapState } from 'vuex'
 import * as icons from '~/assets/icons'
+
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+
 export default {
   data() {
     return {
@@ -137,7 +140,7 @@ export default {
 
       axios({
         method,
-        url: `http://${process.env.HOST}:3000/collections/${layer}/${id}`,
+        url: `http://${host}:3000/collections/${layer}/${id}`,
         data: this.newLayer.feature
       })
         .then(({ data: { _id } }) => {

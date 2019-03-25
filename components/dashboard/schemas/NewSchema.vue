@@ -15,12 +15,7 @@
         </b-field>
         <b-field label="Properties"></b-field>
         <b-field v-for="(field) in fields" :key="field.id" :id="field.id">
-          <b-input
-            name="propName"
-            class="w-100"
-            type="text"
-            placeholder="prop name"
-          ></b-input>
+          <b-input name="propName" class="w-100" type="text" placeholder="prop name"></b-input>
           <b-select name="propType" type="text" placeholder="prop type">
             <option value="number">number</option>
             <option value="string">string</option>
@@ -45,6 +40,8 @@
 <script>
 import uuidv1 from 'uuid'
 import axios from 'axios'
+
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
 
 export default {
   props: ['schemaToEdit'],
@@ -75,7 +72,7 @@ export default {
     saveSchema(schema) {
       axios({
         method: 'post',
-        url: `http://${process.env.HOST}:3000/schemas`,
+        url: `http://${host}:3000/schemas`,
         data: schema
       })
         .then(({ data }) => {

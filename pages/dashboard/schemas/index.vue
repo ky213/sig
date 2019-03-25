@@ -12,6 +12,8 @@ import axios from 'axios'
 import Table from '~/components/dashboard/schemas/Table'
 import NewSchema from '~/components/dashboard/schemas/NewSchema'
 
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+
 export default {
   layout: 'dashboard',
   data() {
@@ -37,7 +39,7 @@ export default {
         cancelText: 'No',
         onOk: () => {
           axios
-            .delete(`http://${process.env.HOST}:3000/schemas/${id}`)
+            .delete(`http://${host}:3000/schemas/${id}`)
             .then(res => {
               this.$store.commit('schemas/deleteSchema', id)
               this.$notification.success({
