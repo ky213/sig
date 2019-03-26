@@ -124,17 +124,22 @@ export default {
       const newProps = {}
       const newPosition = this.newLayer.toGeoJSON().geometry.coordinates
       const layerId = this.newLayer.feature._id
+
       this.isLoading = true
 
       for (const key in this.activeSchema.properties) {
         newProps[key] = formData.get(key)
       }
+
+      if (this.mode === 'create') this.newLayer.feature.properties = newProps
+
       if (this.mode === 'edit')
         this.$store.commit('features/updateFeature', {
           layerId,
           newProps,
           newPosition
         })
+
       this.saveFeature()
     },
     onReset() {
@@ -179,9 +184,9 @@ export default {
             )
           }
 
-          // this.newLayer
-          //   .bindPopup(this.getPopup(this.newLayer.feature.properties))
-          //   .openPopup()
+          this.newLayer
+            .bindPopup(this.getPopup(this.newLayer.feature.properties))
+            .openPopup()
 
           this.$emit('save')
         })
