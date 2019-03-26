@@ -28,7 +28,7 @@ export default {
         },
         onEachFeature: (feature, layer) => {
           layer.featureType = schema.name
-          layer.bindPopup(this.setPopUp(feature.properties))
+          layer.bindPopup(this.getPopUp(feature.properties))
           layer.bindContextMenu({
             contextmenu: true,
             contextmenuWidth: 1000,
@@ -55,7 +55,7 @@ export default {
         `${schema.name}`
       )
     },
-    setPopUp(props) {
+    getPopUp(props) {
       let popup = ``
 
       for (const prop in props) {
@@ -73,9 +73,6 @@ export default {
       return popup
     },
     editLayer({ relatedTarget }) {
-      const options = relatedTarget.options
-
-      if (options && options.contextmenu) relatedTarget.disableEdit()
       this.$emit('edit', relatedTarget)
     },
     deleteLayer({ relatedTarget }) {
@@ -119,7 +116,6 @@ export default {
     this.features.features.forEach(feature =>
       this.$layerGroups[`${feature.schema}`].addData(feature)
     )
-    this.$store.commit('features/flushFeatures')
     this.$map.on('draw:created', ({ layer }) => {
       if (!('feature' in layer)) {
         layer.featureType = ''

@@ -8,7 +8,7 @@
     @reset="onReset"
   >
     <b-tabs v-model="activeTab">
-      <b-tab-item>
+      <b-tab-item :visible="mode==='create'">
         <template slot="header">
           <b-icon pack="fas" icon="image"></b-icon>
           <span>Type</span>
@@ -46,7 +46,7 @@
           </div>
         </b-collapse>
       </b-tab-item>
-      <b-tab-item label="Attributes">
+      <b-tab-item label="Attributes" :disabled="mode =='create' && selectedType==''">
         <template slot="header">
           <b-icon pack="fas" icon="database"></b-icon>
           <span>Attributes</span>
@@ -60,6 +60,7 @@
       <button
         typ="submit"
         :class="['button', 'is-info', 'is-medium', 'card-footer-item',{'is-loading':isLoading}]"
+        :disabled="mode=='create' && !selectedType"
       >
         Save
         <b-icon pack="fas" icon="cloud-upload-alt" class="ml-2" size="is-small"></b-icon>
@@ -99,6 +100,9 @@ export default {
           )
           .pop() || {}
       )
+    },
+    layerCopy() {
+      return { ...this.newLayer.feature }
     }
   },
   methods: {
@@ -118,20 +122,28 @@ export default {
     onSubmit(e) {
       const formData = new FormData(e.target)
       const newProps = {}
-
+      const newPosition = this.newLayer.toGeoJSON().geometry.coordinates
+      const layerId = this.newLayer.feature._id
       this.isLoading = true
+
       for (const key in this.activeSchema.properties) {
         newProps[key] = formData.get(key)
       }
-
-      this.newLayer.feature.properties = newProps
-      this.newLayer.feature.geometry.coordinates = this.newLayer.toGeoJSON().geometry.coordinates
+      if (this.mode === 'edit')
+        this.$store.commit('features/updateFeature', {
+          layerId,
+          newProps,
+          newPosition
+        })
       this.saveFeature()
     },
     onReset() {
+      if (!this.newLayer.feature._id) this.$DrawLayer.removeLayer(this.newLayer)
+      if (this.mode === 'edit') {
+        this.$layerGroups[this.layerCopy.schema].removeLayer(this.newLayer)
+        this.$layerGroups[this.layerCopy.schema].addData(this.layerCopy)
+      }
       this.$emit('cancel')
-      if (!this.newLayer.feature._id) this.$map.removeLayer(this.newLayer)
-      if (this.newLayer.editEnabled()) this.newLayer.disableEdit()
     },
     saveFeature() {
       const method = this.mode === 'create' ? 'post' : 'put'
@@ -148,6 +160,8 @@ export default {
 
           this.newLayer.feature._id = _id
           this.isLoading = false
+          this.$store.commit('features/add', this.newLayer.feature)
+
           this.$notification.success({
             message: 'Success!. Feature saved to database'
           })
@@ -156,11 +170,19 @@ export default {
             this.$DrawLayer.removeLayer(this.newLayer)
             this.$layerGroups[schemaName].addData(this.newLayer.feature)
           }
+          if (this.mode === 'edit') {
+            this.$layerGroups[this.newLayer.featureType].removeLayer(
+              this.newLayer
+            )
+            this.$layerGroups[this.newLayer.featureType].addData(
+              this.newLayer.feature
+            )
+          }
 
-          this.newLayer.disableEdit()
-          this.newLayer
-            .bindPopup(this.getPopup(this.newLayer.feature.properties))
-            .openPopup()
+          // this.newLayer
+          //   .bindPopup(this.getPopup(this.newLayer.feature.properties))
+          //   .openPopup()
+
           this.$emit('save')
         })
         .catch(error => {
@@ -170,6 +192,7 @@ export default {
             message: `Error!`,
             description: error.message
           })
+          this.$emit('save')
         })
     },
     getPopup(props) {
@@ -189,6 +212,9 @@ export default {
       }
       return popup
     }
+  },
+  beforeMount() {
+    if (this.mode === 'edit') this.activeTab = 1
   }
 }
 </script>
@@ -211,6 +237,7 @@ form {
     border: 1px solid #dbdbdb;
   }
 }
+
 .schema-icon:disabled {
   cursor: not-allowed !important;
 }

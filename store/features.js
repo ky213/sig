@@ -10,8 +10,11 @@ export const mutations = {
     addNewFeature(state, payload) {
         state.newFeature = payload
     },
-    flushFeatures(state) {
-        state.features = []
+    updateFeature(state, { layerId, newProps, newPosition }) {
+        const index = state.features.findIndex(({ _id }) => _id === layerId)
+
+        state.features[index].properties = newProps
+        state.features[index].geometry.coordinates = newPosition
     }
 }
 
