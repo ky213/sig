@@ -4,7 +4,7 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
   server: {
-    port: 5000
+    port: 80
   },
 
   /*
