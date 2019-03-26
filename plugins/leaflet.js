@@ -1,5 +1,4 @@
 import Vue from "vue"
-import axios from "axios";
 import L from "leaflet"
 import "leaflet-draw";
 import 'leaflet-contextmenu'
@@ -91,6 +90,8 @@ const leaflet = {
                 }).addTo(this.$map);
 
                 V.prototype.$layerGroups = {}
+
+                V.prototype.$filterButton = L.Control.extend({})
             }
         })
     }

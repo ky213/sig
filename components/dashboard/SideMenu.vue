@@ -5,7 +5,7 @@
         <b-icon pack="fas" icon="database" style="margin-right:5px"/>Layers
       </nuxt-link>
     </a-menu-item>
-    <a-menu-item key="2">
+    <!-- <a-menu-item key="2">
       <a-icon type="calendar"/>Admin
     </a-menu-item>
     <a-sub-menu key="sub1">
@@ -29,7 +29,7 @@
       <a-menu-item key="8">Option 8</a-menu-item>
       <a-menu-item key="9">Option 9</a-menu-item>
       <a-menu-item key="10">Option 10</a-menu-item>
-    </a-sub-menu>
+    </a-sub-menu> -->
   </a-menu>
 </template>
 

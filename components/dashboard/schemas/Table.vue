@@ -20,10 +20,10 @@
       <template slot-scope="props">
         <b-table-column field="name" label="Name" sortable>{{ props.row.name }}</b-table-column>
         <b-table-column field="topo" label="Type" sortable>{{ props.row.topo }}</b-table-column>
-        <b-table-column field="edit" label="Edit" sortable>
+        <b-table-column field="edit" label="Edit">
           <!-- <button class="button is-info is-small" @click="$emit('editSchema', props.row._id)">
             <b-icon class="mr-1 p-1" pack="fas" icon="edit"/>Edit
-          </button> -->
+          </button>-->
           <button class="button is-danger is-small" @click="$emit('deleteSchema', props.row._id)">
             <b-icon class="mr-1" pack="fas" icon="times"/>Delete
           </button>
@@ -32,8 +32,14 @@
 
       <template slot="detail" slot-scope="props">
         <div v-for="(prop, i) in props.row.properties" :key="i">
-          <b>{{i}}</b>
-          : {{prop}}
+          <table class="table table-hover">
+            <tr class="d-flex w-100 justify-content-around">
+              <td style="flex:1">
+                <b>{{i}}</b>
+              </td>
+              <td style="flex:1">{{prop}}</td>
+            </tr>
+          </table>
         </div>
       </template>
     </b-table>

@@ -4,7 +4,7 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
   server: {
-    port: 80
+    port: process.env.NODE_ENV === 'production' ? 80 : 5000
   },
 
   /*
