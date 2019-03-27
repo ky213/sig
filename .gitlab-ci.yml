@@ -2,6 +2,7 @@ build-backend-master:
   only: 
     - master
   script: 
+    - "yarn install"
     - "yarn build"
     - "yarn start"
   stage: build-backend-master
