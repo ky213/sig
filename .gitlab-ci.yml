@@ -1,0 +1,9 @@
+build-backend-master: 
+  only: 
+    - master
+  script: 
+    - "yarn build"
+    - "yarn start"
+  stage: build-backend-master
+stages: 
+  - build-backend-master
