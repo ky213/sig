@@ -16,16 +16,16 @@ export default {
       const iconUrl = icons.default[`${schema.name}`]
 
       this.$layerGroups[`${schema.name}`] = L.geoJSON(null, {
-        pointToLayer: (feature, latlng) => {
-          const icon = L.icon({
-            iconUrl,
-            iconSize: [48, 70],
-            popupAnchor: [0, -32]
-          })
-          return L.marker(latlng, {
-            icon
-          })
-        },
+        // pointToLayer: (feature, latlng) => {
+        //   const icon = L.icon({
+        //     iconUrl,
+        //     iconSize: [48, 70],
+        //     popupAnchor: [0, -32]
+        //   })
+        //   return L.marker(latlng, {
+        //     icon
+        //   })
+        // },
         onEachFeature: (feature, layer) => {
           layer.featureType = schema.name
           layer.bindPopup(this.getPopUp(feature.properties))
@@ -131,6 +131,10 @@ export default {
 
     this.$map.on('click', () => {
       this.$map.contextmenu.hide()
+    })
+
+    document.getElementById('filter-button').addEventListener('click', e => {
+      this.$emit('filterLayers')
     })
   }
 }
