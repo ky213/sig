@@ -2,10 +2,10 @@ build-backend-master:
   only: 
     - master
   script: 
-    - "kill $(netstat -nlpt|grep :80|awk '{print $7}'|awk -F'/' '{print $1}')"
-    - "yarn install"
-    - "yarn build"
-    - "yarn start"
+    - "sudo kill $(netstat -nlpt|grep :80|awk '{print $7}'|awk -F'/' '{print $1}')"
+    - "sudo yarn install"
+    - "sudo yarn build"
+    - "sudo yarn start"
   stage: build-backend-master
 stages: 
   - build-backend-master
