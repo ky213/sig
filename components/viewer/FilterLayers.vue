@@ -135,9 +135,14 @@ export default {
       const layer = this.$layerGroups[this.selectedSchema]
         .getLayers()
         .find(layer => layer.feature._id === id)
+      console.log(layer)
 
-      this.$map.setZoom(18)
-      this.$map.flyTo(layer._latlng)
+      if (layer._latlng) {
+        if (this.$map.getZoom() < 18) this.$map.setZoom(18)
+        this.$map.flyTo(layer._latlng)
+      } else {
+        this.$map.fitBounds(layer.getBounds())
+      }
     }
   }
 }
