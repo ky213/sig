@@ -2,7 +2,7 @@
 <template>
   <form
     class="card position-absolute bg-white p-3 rounded-1"
-    style="height:600px;width:50%;top:160px;right:10px;z-index:1000"
+    style="height:600px;width:40%;top:160px;right:10px;z-index:1000"
     @submit.prevent="onSubmit"
   >
     <b-field class="text-right">
@@ -40,14 +40,14 @@
 
     <hr>
 
-    <section style="overflow:scroll">
+    <section style="overflow-y:scroll">
       <b-field v-for="r in result" :key="r._id">
         <button
           type="button"
           class="btn btn-light w-100 d-flex justify-content-around align-items-center"
         >
           <p class="w-100 text-left m-0">{{r.properties.name}}</p>
-          <button type="button" class="button">
+          <button type="button" class="button" @click="showLayer(r._id)">
             <b-icon pack="fas" icon="eye" class="text-secondary"></b-icon>
           </button>
         </button>
@@ -130,6 +130,14 @@ export default {
     },
     deleteField(id) {
       this.searchObjects = this.searchObjects.filter(obj => obj !== id)
+    },
+    showLayer(id) {
+      const layer = this.$layerGroups[this.selectedSchema]
+        .getLayers()
+        .find(layer => layer.feature._id === id)
+
+      this.$map.setZoom(18)
+      this.$map.flyTo(layer._latlng)
     }
   }
 }
