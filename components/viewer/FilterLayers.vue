@@ -135,7 +135,10 @@ export default {
       const layer = this.$layerGroups[this.selectedSchema]
         .getLayers()
         .find(layer => layer.feature._id === id)
-      console.log(layer)
+
+      this.$map.on('zoomend', e => {
+        layer.openPopup()
+      })
 
       if (layer._latlng) {
         if (this.$map.getZoom() < 18) this.$map.setZoom(18)
