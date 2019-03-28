@@ -10,7 +10,9 @@
       :newLayer="newLayer"
       :mode="mode"
     />
-    <FilterLayers v-if="showFilterLayers" @hide="showFilterLayers=false"/>
+    <keep-alive>
+      <FilterLayers v-if="showFilterLayers" @hide="showFilterLayers=false"/>
+    </keep-alive>
   </div>
 </template>
 
