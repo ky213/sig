@@ -10,10 +10,11 @@ delete-container:
  script: 
    - "docker stop frontendalpha"
  allow_failure: true
- stage: 'deploy'
+ stage: 'test'
 run-container:
  only :
    - master
  script:
    - "docker run --name frontendalpha -p 10.1.1.2480:80 -d --rm ci/frontend:alpha"
  allow_failure: true
+ stage: 'deploy'
