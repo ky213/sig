@@ -1,13 +1,15 @@
-stop-container:
+before_script:
  script: 
    - "docker stop $(docker inspect -f {{.Id}} frontendalpha)"
 build-images:
+ stage: "build"
  only: 
    - master
  script: 
    - "docker build -t ci/frontend:alpha ."
  when: always
 run-container:
+ stage: "deploy"
  only :
    - master
  script:
