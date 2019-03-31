@@ -3,18 +3,18 @@ build-images:
    - master
  script: 
    - "docker build -t ci/frontend:alpha ."
- stage: 'building'
+ stage: 'build'
 delete-container: 
  only: 
    - master
  script: 
    - "docker stop frontendalpha"
  allow_failure: true
- stage: 'starting'
+ stage: 'deploy'
 run-container:
  only :
    - master
  script:
    - "docker run --name frontendalpha -p 80:80 -d --rm ci/frontend:alpha"
  allow_failure: true
- stage: 'starting'
+ stage: 'deploy'
