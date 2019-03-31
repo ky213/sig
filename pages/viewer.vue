@@ -1,7 +1,7 @@
 <template>
   <div class="h-100">
     <no-ssr>
-      <Map @newLayer="onNewLayer" @edit="onEdit"/>
+      <Map @newLayer="onNewLayer" @edit="onEdit" @filterLayers="showFilterLayers=true"/>
     </no-ssr>
     <FeatureSettings
       v-if="showFeatureSettings"
@@ -10,22 +10,27 @@
       :newLayer="newLayer"
       :mode="mode"
     />
+    <keep-alive>
+      <FilterLayers v-if="showFilterLayers" @hide="showFilterLayers=false"/>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import Map from '~/components/map'
 import FeatureSettings from '~/components/viewer/FeatureSettings'
+import FilterLayers from '~/components/viewer/FilterLayers'
 
 export default {
   data() {
     return {
       showFeatureSettings: false,
+      showFilterLayers: false,
       newLayer: null,
       mode: 'create'
     }
   },
-  components: { Map, FeatureSettings },
+  components: { Map, FeatureSettings, FilterLayers },
   methods: {
     onNewLayer(layer) {
       this.showFeatureSettings = true

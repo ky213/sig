@@ -1,0 +1,15 @@
+stop-container:
+ script: 
+   - "docker stop $(docker inspect -f {{.Id}} frontendalpha)"
+build-images:
+ only: 
+   - master
+ script: 
+   - "docker build -t ci/frontend:alpha ."
+ when: always
+run-container:
+ only :
+   - master
+ script:
+   - "docker run --name frontendalpha -p 10.1.1.24:80:80 -d --rm ci/frontend:alpha"
+ when: always

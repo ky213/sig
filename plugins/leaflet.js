@@ -25,6 +25,27 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
+L.Control.FilterButton = L.Control.extend({
+    options: {
+        position: 'topright'
+    },
+    container: null,
+    onAdd(map) {
+        this.container = L.DomUtil.create('button', 'btn btn-default bg-white text-secondary')
+        this.container.innerHTML = '<i class="fas fa-filter"></i>'
+        this.container.style.border = '2px solid rgba(0,0,0,0.2)'
+        this.container.id = 'filter-button'
+        this.container.title = 'filter layers'
+
+
+        return this.container
+    }
+})
+
+L.control.filterButton = function () {
+    return new L.Control.FilterButton()
+}
+
 const leaflet = {
     install(V, options) {
         V.component("leaflet", {
@@ -91,7 +112,7 @@ const leaflet = {
 
                 V.prototype.$layerGroups = {}
 
-                V.prototype.$filterButton = L.Control.extend({})
+                V.prototype.$filterButton = L.control.filterButton().addTo(this.$map)
             }
         })
     }

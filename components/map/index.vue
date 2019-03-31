@@ -132,6 +132,10 @@ export default {
     this.$map.on('click', () => {
       this.$map.contextmenu.hide()
     })
+
+    document.getElementById('filter-button').addEventListener('click', e => {
+      this.$emit('filterLayers')
+    })
   }
 }
 </script>
