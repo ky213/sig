@@ -1,6 +1,3 @@
-before_script: 
-   - docker stop $(docker inspect -f {{.Id}} frontendalpha)
-   allow_failure: true
 build-images:
  stage: "build"
  only: 
@@ -12,6 +9,8 @@ run-container:
  stage: "deploy"
  only :
    - master
+ before_script: 
+   - docker stop $(docker inspect -f {{.Id}} frontendalpha)
  script:
    - "docker run --name frontendalpha -p 10.1.1.24:80:80 -d --rm ci/frontend:alpha"
  when: always
