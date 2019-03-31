@@ -11,7 +11,7 @@
       </button>
     </b-field>
     <b-field>
-      <b-select placeholder="select layer" expanded @input="onSelectedSchema" required>
+      <b-select placeholder="select layer" expanded @input="selectedSchema = $event" required>
         <option v-for="schema in schemas" :key="schema._id" :value="schema.slug">{{schema.slug}}</option>
       </b-select>
     </b-field>
@@ -29,7 +29,7 @@
     </b-field>
     <b-field>
       <button type="button" class="button is-fullwidth" title="add operator" @click="addField">
-        <b-icon pack="fas" icon="plus"></b-icon>
+        <b-icon pack="fas" icon="plus" class="mr-2"></b-icon>Add operator
       </button>
     </b-field>
     <b-field>
@@ -121,10 +121,6 @@ export default {
           this.isLoading = false
         })
     },
-    onSelectedSchema(name) {
-      this.selectedSchema = name
-      if (this.searchObjects.length < 1) this.addField()
-    },
     addField() {
       if (this.selectedSchema) this.searchObjects.push(uuidv1())
     },
@@ -136,16 +132,13 @@ export default {
         .getLayers()
         .find(layer => layer.feature._id === id)
 
-      this.$map.on('zoomend', e => {
-        layer.openPopup()
-      })
-
       if (layer._latlng) {
         if (this.$map.getZoom() < 18) this.$map.setZoom(18)
         this.$map.flyTo(layer._latlng)
       } else {
         this.$map.fitBounds(layer.getBounds())
       }
+      layer.openPopup()
     }
   }
 }
