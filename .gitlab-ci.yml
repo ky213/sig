@@ -7,6 +7,3 @@ build-frontend-master:
     - "docker build -t ci/frontend:alpha ."
     - "docker stop frontendalpha && docker rm frontendalpha"
     - "docker run --name frontendalpha -p 80:80 -d --rm ci/frontend:alpha"
-  stage: build-backend-master
-stages: 
-  - build-backend-master
