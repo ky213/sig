@@ -10,6 +10,7 @@ RUN yarn install
 # RUN npm install --only=production
 # Bundle app source
 EXPOSE 80
+ENV NODE_ENV="production"
 RUN yarn build
 CMD [ "yarn", "start" ]
 
