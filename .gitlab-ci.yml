@@ -1,11 +1,11 @@
-build-backend-master: 
+--- 
+build-frontend-master: 
   only: 
     - master
   script: 
-    - "sudo kill $(netstat -nlpt|grep :80|awk '{print $7}'|awk -F'/' '{print $1}')"
-    - "sudo yarn install"
-    - "sudo yarn build"
-    - "sudo yarn start"
+    - env
+    - "docker build -t ci/frontend:alpha ."
+    - "docker run --name frontendalpha -p 10.1.1.24:80:80 -d --rm --link mongo:db ci/frontend:alpha"
   stage: build-backend-master
 stages: 
   - build-backend-master
