@@ -1,6 +1,5 @@
-before_script:
- script: 
-   - "docker stop $(docker inspect -f {{.Id}} frontendalpha)"
+before_script: 
+   - docker stop $(docker inspect -f {{.Id}} frontendalpha)
 build-images:
  stage: "build"
  only: 
