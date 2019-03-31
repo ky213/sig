@@ -1,4 +1,5 @@
 stop-container:
+ script: 
    - "docker stop $(docker inspect -f {{.Id}} frontendalpha)"
 build-images:
  only: 
