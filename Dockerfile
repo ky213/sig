@@ -11,7 +11,10 @@ COPY server/ .
 # RUN npm install --only=production
 # Bundle app source
 EXPOSE 80
+
 ENV NODE_ENV="production"
 
-CMD [ "node", "server" ]
+RUN yarn global add cross-env
+
+CMD [ "cross-env","NODE_ENV=production","HOST=0.0.0.0","node", "server" ]
 
