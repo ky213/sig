@@ -4,5 +4,5 @@ build-images:
    - master
  script: 
    - chmod +x deploy.sh
-   - client = forntendalpha /deploy.sh
+   - client=frontendalpha ./deploy.sh
    
