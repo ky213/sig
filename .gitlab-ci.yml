@@ -1,7 +1,7 @@
 before_script:
   - yarn
   - yarn build
-  - cat .nuxt
+  - ls -lah .nuxt
 build-images:
  stage: "build"
  only: 
