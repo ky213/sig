@@ -13,4 +13,4 @@ else
 fi
 
 echo "Building frontend alpha docker images .... "
-yarn global add cross-env && docker build -t ci/frontend:alpha . && docker run --name "$client" -p 10.1.1.24:80:80 -d --rm ci/frontend:alpha
+docker build -t ci/frontend:alpha . && docker run --name "$client" -p 10.1.1.24:80:80 -d --rm ci/frontend:alpha
