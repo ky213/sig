@@ -13,6 +13,7 @@ EXPOSE 80
 
 ENV NODE_ENV="production"
 
+RUN yarn global add cross-env
 RUN yarn build
 
 CMD [ "yarn", "start" ]
