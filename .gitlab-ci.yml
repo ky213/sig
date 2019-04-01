@@ -1,9 +1,9 @@
-before_script:
- - yarn
 build-images:
  stage: "build"
  only: 
    - master
+ before_script:
+  - yarn
  script: 
    - "docker build -t ci/frontend:alpha ."
  when: always
