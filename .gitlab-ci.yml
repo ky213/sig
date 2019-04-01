@@ -9,6 +9,8 @@ run-container:
  stage: "deploy"
  only :
    - master
+ before_script: 
+   - docker stop frontendalpha
  script:
    - "docker run --name frontendalpha -p 10.1.1.24:80:80 -d --rm ci/frontend:alpha"
  when: always
