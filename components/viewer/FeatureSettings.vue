@@ -157,7 +157,7 @@ export default {
 
       axios({
         method,
-        url: `http://${host}:3000/collections/${layer}/${id}`,
+        url: `${host}/collections/${layer}/${id}`,
         data: this.newLayer.feature
       })
         .then(({ data: { _id } }) => {

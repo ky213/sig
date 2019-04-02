@@ -72,7 +72,7 @@ export default {
     saveSchema(schema) {
       axios({
         method: 'post',
-        url: `http://${host}:3000/schemas`,
+        url: `${host}/schemas`,
         data: schema
       })
         .then(({ data }) => {

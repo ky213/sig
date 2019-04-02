@@ -95,7 +95,7 @@ export default {
     deletFeatureFromDB({ feature, featureType }) {
       axios({
         method: 'delete',
-        url: `http://${host}:3000/collections/${featureType}/${feature._id}`
+        url: `${host}/collections/${featureType}/${feature._id}`
       })
         .then(() => {
           this.$notification.success({
