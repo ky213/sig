@@ -12,7 +12,7 @@ import axios from 'axios'
 import Table from '~/components/dashboard/schemas/Table'
 import NewSchema from '~/components/dashboard/schemas/NewSchema'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
 
 export default {
   layout: 'dashboard',

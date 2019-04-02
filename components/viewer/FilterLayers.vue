@@ -106,7 +106,7 @@ export default {
     },
     search(query) {
       const host =
-        process.env.NODE_ENV === 'production' ? '10.1.1.24' : 'localhost'
+        process.env.NODE_ENV === 'production' ? 'https://box.eadn.dz/sig-backend' : 'localhost'
       axios({
         method: 'post',
         url: `http://${host}:3000/searches/${this.selectedSchema}`,

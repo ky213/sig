@@ -41,7 +41,7 @@
 import uuidv1 from 'uuid'
 import axios from 'axios'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
 
 export default {
   props: ['schemaToEdit'],

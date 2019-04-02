@@ -1,5 +1,5 @@
 import axios from "axios";
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
 
 export const actions = {
     async nuxtServerInit({ commit }, context) {

@@ -78,7 +78,7 @@ import axios from 'axios'
 import { mapState } from 'vuex'
 import * as icons from '~/assets/icons'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : '10.1.1.24'
+const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
 
 export default {
   data() {
