@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%; display:flex; flex-direction:column">
     <Navbar/>
-    <Body style="flex:1">
+    <Body >
       <nuxt/>
     </Body>
     <Footer/>

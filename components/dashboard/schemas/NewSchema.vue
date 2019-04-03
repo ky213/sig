@@ -3,24 +3,72 @@
     <div class="modal-card" style="width: 500px">
       <section class="modal-card-body">
         <b-field label="Name">
-          <b-input name="name" type="text" placeholder="schema name" required></b-input>
+          <b-input
+            name="name"
+            type="text"
+            :value="schemaToEdit ? schemaToEdit.name : ''"
+            placeholder="schema name"
+            required
+          ></b-input>
         </b-field>
 
         <b-field label="Type">
-          <b-select name="topo" placeholder="Geometry Type" expanded>
-            <option value="Point">Point</option>
-            <option value="LineString">Line</option>
-            <option value="Plolygon">Polygon</option>
-          </b-select>
+          <div class="control is-expanded">
+            <span class="select is-fullwidth is-empty">
+              <select name="topo" required>
+                <option
+                  v-if="!schemaToEdit"
+                  selected="selected"
+                  disabled="disabled"
+                  hidden="hidden"
+                  required
+                >Geometry Type</option>
+                <option
+                  value="Point"
+                  :selected="schemaToEdit && schemaToEdit.topo === 'Point'"
+                >Point</option>
+                <option
+                  value="LineString"
+                  :selected="schemaToEdit && schemaToEdit.topo === 'LineString'"
+                >Line</option>
+                <option
+                  value="Polygon"
+                  :selected="schemaToEdit && schemaToEdit.topo === 'Polygon'"
+                >Polygon</option>
+              </select>
+            </span>
+          </div>
         </b-field>
         <b-field label="Properties"></b-field>
-        <b-field v-for="(field) in fields" :key="field.id" :id="field.id">
-          <b-input name="propName" class="w-100" type="text" placeholder="prop name"></b-input>
-          <b-select name="propType" type="text" placeholder="prop type">
-            <option value="number">number</option>
-            <option value="string">string</option>
-          </b-select>
-          <button type="button" class="button" @click="deleteField(field.id)">
+        <b-field v-for="(field) in fields" :key="field.key" :id="field.key">
+          <b-input
+            name="propName"
+            :value="Object.keys(field)[2]"
+            class="w-100"
+            type="text"
+            placeholder="prop name"
+          ></b-input>
+          <div class="control">
+            <span class="select is-empty">
+              <select name="propType" type="text">
+                <option
+                  v-if="Object.keys(field).length <= 1"
+                  selected="selected"
+                  disabled="disabled"
+                  hidden="hidden"
+                >prop type</option>
+                <option value="number" :selected="Object.values(field)[2]==='Number'">number</option>
+                <option value="string" :selected="Object.values(field)[2]==='String'">text</option>
+              </select>
+            </span>
+            <!---->
+          </div>
+          <button
+            v-if="field.isNewField"
+            type="button"
+            class="button"
+            @click="deleteField(field.key)"
+          >
             <b-icon pack="fas" icon="times-circle"></b-icon>
           </button>
         </b-field>
@@ -41,7 +89,10 @@
 import uuidv1 from 'uuid'
 import axios from 'axios'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
+const host =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://box.eadn.dz/sig-backend'
 
 export default {
   props: ['schemaToEdit'],
@@ -70,9 +121,14 @@ export default {
       this.saveSchema(newSchema)
     },
     saveSchema(schema) {
+      const method = this.schemaToEdit ? 'put' : 'post'
+      const id = method === 'put' ? this.schemaToEdit._id : ''
+      const commit =
+        method === 'put' ? 'schemas/updateSchema' : 'schemas/addNewSchema'
+
       axios({
-        method: 'post',
-        url: `${host}/schemas`,
+        method,
+        url: `${host}/schemas/${id}`,
         data: schema
       })
         .then(({ data }) => {
@@ -80,8 +136,10 @@ export default {
             message: 'Success!',
             description: 'Saved to database'
           })
-          schema._id = data._id
-          this.$store.commit('schemas/addNewSchema', schema)
+          console.log(data)
+
+          schema._id = method === 'post' ? data._id : this.schemaToEdit._id
+          this.$store.commit(commit, schema)
           this.isLoading = false
           this.$emit('saved')
         })
@@ -94,11 +152,23 @@ export default {
         })
     },
     addField() {
-      this.fields.push({ id: uuidv1() })
+      this.fields.push({ key: uuidv1(), isNewField: true })
     },
-    deleteField(id) {
-      this.fields = this.fields.filter(field => field.id != id)
+    deleteField(key) {
+      console.log('key!!!!', key)
+
+      this.fields = this.fields.filter(field => field.key != key)
     }
+  },
+  beforeMount() {
+    if (this.schemaToEdit)
+      for (const prop in this.schemaToEdit.properties) {
+        this.fields.push({
+          key: uuidv1(),
+          isNewField: false,
+          [prop]: this.schemaToEdit.properties[prop]
+        })
+      }
   }
 }
 </script>

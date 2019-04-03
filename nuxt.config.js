@@ -1,10 +1,10 @@
 const pkg = require('./package')
-
+const base = process.env.NODE_ENV === "production" ? "/sig/" : "/"
 
 module.exports = {
   mode: 'universal',
   router: {
-    base: "/sig/"
+    base
   },
   server: {
     port: process.env.NODE_ENV === 'production' ? 80 : 5000

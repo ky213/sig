@@ -1,7 +1,7 @@
 <template>
-  <div class="w-100">
+  <div class="w-100" style="max-height:100%;overflow-y:scroll">
     <Table @newSchema="showModal = true" @deleteSchema="onDeleteSchema" @editSchema="onEditSchema"/>
-    <b-modal :active.sync="showModal" has-modal-card>
+    <b-modal :active.sync="showModal" has-modal-card @close="schemaToEdit=null">
       <NewSchema @saved="showModal = false" :schemaToEdit="schemaToEdit"/>
     </b-modal>
   </div>
@@ -12,7 +12,10 @@ import axios from 'axios'
 import Table from '~/components/dashboard/schemas/Table'
 import NewSchema from '~/components/dashboard/schemas/NewSchema'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
+const host =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://box.eadn.dz/sig-backend'
 
 export default {
   layout: 'dashboard',

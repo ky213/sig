@@ -10,6 +10,13 @@ export const mutations = {
     addNewSchema(state, payload) {
         state.schemas.push(payload)
     },
+    updateSchema(state, payload) {
+        const newSchemas = state.schemas.filter(({ _id }) => _id != payload._id)
+
+        newSchemas.push(payload)
+        state.schemas = newSchemas
+    }
+    ,
     deleteSchema(state, id) {
         state.schemas = state.schemas.filter(schema => schema._id !== id)
     }

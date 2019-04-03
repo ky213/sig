@@ -1,12 +1,5 @@
 <template>
-  <div>
+  <div style="flex:1;max-height:100%;overflow-y:scroll;">
     <slot></slot>
   </div>
 </template>
-
-<script>
-export default {}
-</script>
-
-<style>
-</style>

@@ -21,9 +21,9 @@
         <b-table-column field="name" label="Name" sortable>{{ props.row.name }}</b-table-column>
         <b-table-column field="topo" label="Type" sortable>{{ props.row.topo }}</b-table-column>
         <b-table-column field="edit" label="Edit">
-          <!-- <button class="button is-info is-small" @click="$emit('editSchema', props.row._id)">
+          <button class="button is-info is-small" @click="$emit('editSchema', props.row._id)">
             <b-icon class="mr-1 p-1" pack="fas" icon="edit"/>Edit
-          </button>-->
+          </button>
           <button class="button is-danger is-small" @click="$emit('deleteSchema', props.row._id)">
             <b-icon class="mr-1" pack="fas" icon="times"/>Delete
           </button>

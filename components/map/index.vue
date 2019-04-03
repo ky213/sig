@@ -7,7 +7,7 @@ import axios from 'axios'
 import * as icons from '@/assets/icons'
 import { mapState } from 'vuex'
 
-const host = process.env.NODE_ENV === 'development' ? 'localhost' : 'https://box.eadn.dz/sig-backend'
+const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://box.eadn.dz/sig-backend'
 
 export default {
   computed: mapState(['features', 'schemas']),

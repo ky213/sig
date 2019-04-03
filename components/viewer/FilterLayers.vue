@@ -14,6 +14,10 @@
       <b-select placeholder="select layer" expanded @input="selectedSchema = $event" required>
         <option v-for="schema in schemas" :key="schema._id" :value="schema.slug">{{schema.slug}}</option>
       </b-select>
+      <b-select placeholder="select logic" required @input="operatorRoot=$event">
+        <option value="&&" selected>AND</option>
+        <option value="||">OR</option>
+      </b-select>
     </b-field>
     <b-field v-for="obj in searchObjects" :key="obj">
       <b-select name="field" placeholder="prop" expanded>
@@ -67,6 +71,7 @@ export default {
       selectedSchema: '',
       schemas: this.$store.state.schemas.schemas,
       operators: ['like', '=', '>', '<'],
+      operatorRoot: '',
       searchObjects: [],
       result: []
     }
@@ -102,11 +107,13 @@ export default {
         })
         .filter(v => v)
 
-      this.search([{ operatorRoot: '&&' }, searchQuery])
+      this.search([{ operatorRoot: this.operatorRoot }, searchQuery])
     },
     search(query) {
       const host =
-        process.env.NODE_ENV === 'production' ? 'https://box.eadn.dz/sig-backend' : 'localhost'
+        process.env.NODE_ENV === 'production'
+          ? 'https://box.eadn.dz/sig-backend'
+          : 'http://localhost:3000'
       axios({
         method: 'post',
         url: `${host}/searches/${this.selectedSchema}`,
