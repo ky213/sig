@@ -2,21 +2,34 @@ import axios from "axios";
 const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://box.eadn.dz/sig-backend'
 
 export const actions = {
-    async nuxtServerInit({ commit }, context) {
-        const { data: { Schemas } } = await axios(`${host}/schemas`)
-        const slugs = Schemas.map(({ slug }) => slug)
-        const requests = slugs.map(slug => () => axios(`${host}/collections/${slug}`))
-        const response = await axios.all(requests.map(req => req()))
+  async nuxtServerInit({
+    commit
+  }, context) {
+    const {
+      data: {
+        Schemas
+      }
+    } = await axios(`${host}/schemas`)
+    const slugs = Schemas.map(({
+      slug
+    }) => slug)
+    const requests = slugs.map(slug => () => axios(`${host}/collections/${slug}`))
+    const response = await axios.all(requests.map(req => req()))
 
-        response.forEach(({ data, request: { path } }) => {
-            const schemaName = path.split('/')[2]
-            const features = data[schemaName]
-            features.forEach(feature => {
-                feature.schema = schemaName
-                commit('features/add', feature)
-            })
-            commit('schemas/add', Schemas)
-        })
+    response.forEach(({
+      data,
+      request: {
+        path
+      }
+    }) => {
+      const schemaName = path.split('/')[3]
+      const features = data[schemaName]
+      features.forEach(feature => {
+        feature.schema = schemaName
+        commit('features/add', feature)
+      })
+      commit('schemas/add', Schemas)
+    })
 
-    }
+  }
 }
