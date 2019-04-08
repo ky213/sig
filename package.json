@@ -5,7 +5,7 @@
   "author": "yaaqoub.keddaoui",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development HOST=localhost nodemon server/index.js --watch server",
+    "dev": "cross-env NODE_ENV=development  nodemon server/index.js --watch server",
     "build": "cross-env HOST=0.0.0.0 nuxt build",
     "start": "cross-env NODE_ENV=production HOST='0.0.0.0' node server/index.js",
     "generate": "nuxt generate",

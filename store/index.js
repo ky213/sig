@@ -22,8 +22,9 @@ export const actions = {
         path
       }
     }) => {
-      const schemaName = path.split('/')[3]
+      const schemaName = path.split('/')[2]
       const features = data[schemaName]
+
       features.forEach(feature => {
         feature.schema = schemaName
         commit('features/add', feature)
