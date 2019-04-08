@@ -22,7 +22,7 @@ export const actions = {
         path
       }
     }) => {
-      const schemaName = path.split('/')[2]
+      const schemaName = path.split('/')[3]
       const features = data[schemaName]
 
       features.forEach(feature => {
