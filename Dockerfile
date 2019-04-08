@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-RUN rm  package.json yarn.lock
+RUN rm  ./package.json
 COPY . .
 RUN yarn
 # If you are building your code for production
