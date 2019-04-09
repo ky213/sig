@@ -22,7 +22,8 @@ export const actions = {
         path
       }
     }) => {
-      const schemaName = path.split('/')[3]
+      const pathSLot = process.env.NODE_ENV === "development" ? 2 : 3
+      const schemaName = path.split('/')[pathSLot]
       const features = data[schemaName]
 
       features.forEach(feature => {

@@ -22,9 +22,10 @@ export default {
             iconSize: [48, 70],
             popupAnchor: [0, -32]
           })
-          return L.marker(latlng, {
-            icon
-          })
+
+          return L.marker(latlng,iconUrl ? {
+           icon
+          } : null)
         },
         onEachFeature: (feature, layer) => {
           layer.featureType = schema.name

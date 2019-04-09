@@ -8,7 +8,6 @@ import ooredoo from "./ooredoo_bts.png"
 import edit from "./svg/edit.svg"
 import del from "./svg/delete.svg"
 
-
 export default {
     msan,
     lfo,
@@ -18,5 +17,5 @@ export default {
     djezzy,
     ooredoo,
     edit,
-    del
+    del,
 }
