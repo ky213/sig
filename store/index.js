@@ -1,5 +1,6 @@
 import axios from "axios";
 const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://box.eadn.dz/sig-backend'
+const pathSLot = process.env.NODE_ENV === "development" ? 2 : 3
 
 export const actions = {
   async nuxtServerInit({
@@ -22,8 +23,7 @@ export const actions = {
         path
       }
     }) => {
-      const pathSLot = process.env.NODE_ENV === "development" ? 2 : 3
-      const schemaName = path.split('/')[3]
+      const schemaName = path.split('/')[pathSLot]
       const features = data[schemaName]
 
       features.forEach(feature => {
