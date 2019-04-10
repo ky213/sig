@@ -70,7 +70,7 @@ export default {
       isLoading: false,
       selectedSchema: '',
       schemas: this.$store.state.schemas.schemas,
-      operators: ['like', '=', '>', '<'],
+      operators: ['like', '==', '>', '<'],
       operatorRoot: '',
       searchObjects: [],
       result: []
