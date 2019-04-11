@@ -78,7 +78,10 @@ import axios from 'axios'
 import { mapState } from 'vuex'
 import * as icons from '~/assets/icons'
 
-const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://box.eadn.dz/sig-backend'
+const host =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://box.eadn.dz/sig-backend'
 
 export default {
   data() {
@@ -93,12 +96,10 @@ export default {
     ...mapState({ schemas: state => state.schemas.schemas }),
     activeSchema() {
       return (
-        this.schemas
-          .filter(
-            schema =>
-              schema.name === this.selectedType || this.newLayer.featureType
-          )
-          .pop() || {}
+        this.schemas.find(
+          schema =>
+            schema.name === this.selectedType || this.newLayer.featureType
+        ) || {}
       )
     },
     layerCopy() {

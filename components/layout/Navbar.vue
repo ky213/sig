@@ -2,7 +2,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand align-items-center">
       <a class="navbar-item has-text-grey-darker" href="#">
-        <b style="font-size:2em" class="is-danger">CARTADZ</b>
+        <b style="font-size:2em" class="is-danger">kharitaDZ</b>
       </a>
       
       <a
