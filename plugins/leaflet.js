@@ -82,7 +82,7 @@ const leaflet = {
                     ,
                     "ESRI": L.tileLayer(
                         "https://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}",
-                        { variant: "World_Street_Map" }
+                        { variant: "World_Imagery" }
                     ),
                     "MapBox": L.tileLayer(
                         "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}{r}.png?access_token={accessToken}",
