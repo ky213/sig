@@ -36,10 +36,7 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons">
-            <!-- <a class="button is-primary">
-              <strong>Sign up</strong>
-            </a> -->
+          <div class="buttons" @click="openLogin">
             <a class="button is-light">Log in</a>
           </div>
         </div>
@@ -49,10 +46,23 @@
 </template>
 
 <script>
+import LoginForm from '../Auth/LoginForm.vue'
+
 export default {
   data() {
     return {
-      isActive: false
+      isActive: false,
+      isComponentModalActive: false
+    }
+  },
+  components: { LoginForm },
+  methods: {
+    openLogin() {
+      this.$modal.open({
+        parent: this,
+        component: LoginForm,
+        hasModalCard: true
+      })
     }
   }
 }
