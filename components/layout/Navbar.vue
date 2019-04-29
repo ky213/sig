@@ -36,8 +36,8 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons" @click="openLogin">
-            <a class="button is-light">Log in</a>
+          <div class="buttons " @click="user.authenticated ? logout() : openLogin() ">
+            <a :class="['button', 'is-light', {'is-success':user.authenticated}] ">{{ user.authenticated ? 'Logout' : 'Login'}}</a>
           </div>
         </div>
       </div>
@@ -46,22 +46,33 @@
 </template>
 
 <script>
-import LoginForm from '../Auth/LoginForm.vue'
+import { mapState } from 'vuex'
+import LoginForm from '../auth/LoginForm.vue'
 
 export default {
+  components: { LoginForm },
   data() {
     return {
       isActive: false,
       isComponentModalActive: false
     }
   },
-  components: { LoginForm },
+  computed: mapState(['user']),
   methods: {
     openLogin() {
       this.$modal.open({
         parent: this,
         component: LoginForm,
         hasModalCard: true
+      })
+    },
+    logout() {
+      this.$dialog.confirm({
+        message: 'are you sure you want to logout ?',
+        onConfirm: () => {
+          localStorage.clear()
+          this.$store.commit('user/logout')
+        }
       })
     }
   }
