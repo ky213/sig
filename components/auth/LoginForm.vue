@@ -2,7 +2,10 @@
   <form action="" @submit.prevent="login">
     <div class="modal-card" style="width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">Login</p>
+        <p v-if="!error" class="modal-card-title">Login</p>
+        <b-message v-else type="is-danger" has-icon>
+          {{error}}
+        </b-message>
       </header>
       <section class="modal-card-body">
         <b-field label="Username">
@@ -42,7 +45,8 @@ export default {
     return {
       username: '',
       password: '',
-      isLoading: false
+      isLoading: false,
+      error: ''
     }
   },
   methods: {
@@ -50,7 +54,7 @@ export default {
       this.isLoading = true
       axios({
         method: 'post',
-        url: 'https://10.1.1.177:8080/admin/api/auth/login',
+        url: 'http://10.1.1.177:8080/admin/api/auth/login',
         headers: {
           'content-type': 'application/json'
         },
@@ -70,7 +74,8 @@ export default {
         })
         .catch(error => {
           this.isLoading = false
-          console.log('Error!!', error)
+          this.error = error.message
+          console.log('Error!!', error.message)
         })
     }
   }
