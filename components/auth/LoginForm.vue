@@ -50,7 +50,7 @@ export default {
       this.isLoading = true
       axios({
         method: 'post',
-        url: 'http://10.1.1.177:8080/admin/api/auth/login',
+        url: 'https://10.1.1.177:8080/admin/api/auth/login',
         headers: {
           'content-type': 'application/json'
         },

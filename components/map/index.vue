@@ -146,11 +146,11 @@ export default {
       this.$emit('filterLayers')
     })
 
-    if(this.user.authenticated)
+    if(this.user.authenticated && this.user.role !== "VISIT")
       this.$map.addControl(this.$drawControl)
 
     this.$store.subscribe((mutation, state) => {
-      if (!state.user.authenticated) this.$map.removeControl(this.$drawControl)
+      if (!state.user.authenticated || this.user.role === "VISIT") this.$map.removeControl(this.$drawControl)
       else this.$map.addControl(this.$drawControl)
     })
   }
