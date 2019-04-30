@@ -61,10 +61,12 @@ export default {
       })
         .then(({ data: { accessToken } }) => {
           localStorage.setItem('sigToken', accessToken)
-          this.$store.commit('user/login')
+          this.$store.commit(
+            'user/login',
+            jwt_decode(accessToken).auth.split(',')
+          )
           this.$emit('close')
           this.isLoading = false
-          console.log(jwt_decode(accessToken))
         })
         .catch(error => {
           this.isLoading = false

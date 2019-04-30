@@ -29,7 +29,7 @@
           <b-icon pack="fas" icon="map-marked-alt" style="margin-right:5px"/>Viewer
         </nuxt-link>
 
-        <nuxt-link class="navbar-item" to="/dashboard">
+        <nuxt-link class="navbar-item" to="/dashboard" v-if="user.role === 'ADMIN'">
           <b-icon pack="fas" icon="cog" style="margin-right:5px"/>Administration
         </nuxt-link>
       </div>
@@ -72,10 +72,11 @@ export default {
         onConfirm: () => {
           localStorage.clear()
           this.$store.commit('user/logout')
+          this.$router.push("/")
         }
       })
     }
-  }
+  },
 }
 </script>
 

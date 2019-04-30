@@ -4,10 +4,12 @@
 
 <script>
 export default {
-layout:'dashboard'
+  layout: 'dashboard',
+  validate({ params, query, store }) {
+    return store.state.user.authenticated
+  }
 }
 </script>
 
 <style>
-
 </style>

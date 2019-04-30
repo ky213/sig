@@ -7,10 +7,13 @@ import axios from 'axios'
 import * as icons from '@/assets/icons'
 import { mapState } from 'vuex'
 
-const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://box.eadn.dz/sig-backend'
+const host =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://box.eadn.dz/sig-backend'
 
 export default {
-  computed: mapState(['features', 'schemas']),
+  computed: mapState(['user', 'features', 'schemas']),
   methods: {
     createLayerGroup(schema) {
       const iconUrl = icons.default[`${schema.name}`]
@@ -23,9 +26,14 @@ export default {
             popupAnchor: [0, -32]
           })
 
-          return L.marker(latlng,iconUrl ? {
-           icon
-          } : null)
+          return L.marker(
+            latlng,
+            iconUrl
+              ? {
+                  icon
+                }
+              : null
+          )
         },
         onEachFeature: (feature, layer) => {
           layer.featureType = schema.name
@@ -127,7 +135,7 @@ export default {
     })
 
     this.$map.on('contextmenu.show', ({ contextmenu }) => {
-      if (contextmenu._items.length > 2) this.$map.contextmenu.hide()
+      if (!this.user.authenticated || contextmenu._items.length > 2) this.$map.contextmenu.hide()
     })
 
     this.$map.on('click', () => {
@@ -136,6 +144,14 @@ export default {
 
     document.getElementById('filter-button').addEventListener('click', e => {
       this.$emit('filterLayers')
+    })
+
+    if(this.user.authenticated)
+      this.$map.addControl(this.$drawControl)
+
+    this.$store.subscribe((mutation, state) => {
+      if (!state.user.authenticated) this.$map.removeControl(this.$drawControl)
+      else this.$map.addControl(this.$drawControl)
     })
   }
 }

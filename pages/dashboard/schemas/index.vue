@@ -19,6 +19,9 @@ const host =
 
 export default {
   layout: 'dashboard',
+  validate({ params, query, store }) {
+    return store.state.user.authenticated
+  },
   data() {
     return {
       showModal: false,

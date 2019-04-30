@@ -20,6 +20,7 @@
 import Map from '~/components/map'
 import FeatureSettings from '~/components/viewer/FeatureSettings'
 import FilterLayers from '~/components/viewer/FilterLayers'
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -30,6 +31,7 @@ export default {
       mode: 'create'
     }
   },
+  computed: mapState(['user']),
   components: { Map, FeatureSettings, FilterLayers },
   methods: {
     onNewLayer(layer) {
@@ -49,11 +51,7 @@ export default {
     onSave() {
       this.showFeatureSettings = false
     }
-  }
+  },
+
 }
 </script>
-
-
-
-
-

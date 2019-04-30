@@ -101,11 +101,11 @@ const leaflet = {
                         circlemarker: false,
                         rectangle: false
                     }
-                }).addTo(this.$map);
+                })
 
                 V.prototype.$print = L.easyPrint({
                     title: 'print',
-                    position: 'topleft',
+                    position: 'bottomleft',
                     sizeModes: ['A4Portrait', 'A4Landscape'],
                     exportOnly: true
                 }).addTo(this.$map);
@@ -113,7 +113,7 @@ const leaflet = {
                 V.prototype.$layerGroups = {}
 
                 V.prototype.$filterButton = L.control.filterButton().addTo(this.$map)
-            }
+            },
         })
     }
 }
