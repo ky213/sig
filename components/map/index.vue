@@ -135,7 +135,8 @@ export default {
     })
 
     this.$map.on('contextmenu.show', ({ contextmenu }) => {
-      if (!this.user.authenticated || contextmenu._items.length > 2) this.$map.contextmenu.hide()
+      if (!this.user.authenticated || contextmenu._items.length > 2)
+        this.$map.contextmenu.hide()
     })
 
     this.$map.on('click', () => {
@@ -146,11 +147,18 @@ export default {
       this.$emit('filterLayers')
     })
 
-    if(this.user.authenticated && this.user.role !== "VISIT")
+    if (
+      this.user.roles.includes('ROLE_SIG_ADMIN') ||
+      this.user.roles.includes('ROLE_SIG_EDIT')
+    )
       this.$map.addControl(this.$drawControl)
 
     this.$store.subscribe((mutation, state) => {
-      if (!state.user.authenticated || this.user.role === "VISIT") this.$map.removeControl(this.$drawControl)
+      if (
+        !this.user.roles.includes('ROLE_SIG_ADMIN') ||
+        !this.user.roles.includes('ROLE_SIG_EDIT')
+      )
+        this.$map.removeControl(this.$drawControl)
       else this.$map.addControl(this.$drawControl)
     })
   }

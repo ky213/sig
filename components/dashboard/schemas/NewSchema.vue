@@ -155,8 +155,6 @@ export default {
       this.fields.push({ key: uuidv1(), isNewField: true })
     },
     deleteField(key) {
-      console.log('key!!!!', key)
-
       this.fields = this.fields.filter(field => field.key != key)
     }
   },
@@ -172,4 +170,3 @@ export default {
   }
 }
 </script>
-
