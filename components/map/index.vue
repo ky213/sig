@@ -16,8 +16,9 @@ export default {
   computed: mapState(['user', 'features', 'schemas']),
   methods: {
     createLayerGroup(schema) {
+      // get icons for each schema by schema name
       const iconUrl = icons.default[`${schema.name}`]
-
+      // create a geoJSON layer for each schema
       this.$layerGroups[`${schema.name}`] = L.geoJSON(null, {
         pointToLayer: (feature, latlng) => {
           const icon = L.icon({
@@ -38,6 +39,7 @@ export default {
         onEachFeature: (feature, layer) => {
           layer.featureType = schema.name
           layer.bindPopup(this.getPopUp(feature.properties))
+          // right-click layer menu
           layer.bindContextMenu({
             contextmenu: true,
             contextmenuWidth: 1000,
@@ -58,13 +60,13 @@ export default {
           })
         }
       }).addTo(this.$cluster)
-
+      // add layer group to base-map selector menu
       this.$BaseMap.addOverlay(
         this.$layerGroups[`${schema.name}`],
         `${schema.name}`
       )
     },
-    getPopUp(props) {
+    getPopUp(props) { /* generate popup content for each layer */
       let popup = ``
 
       for (const prop in props) {
@@ -81,7 +83,7 @@ export default {
       }
       return popup
     },
-    editLayer({ relatedTarget }) {
+    editLayer({ relatedTarget }) { /* emit an edit event to the viewer edit menu click */
       this.$emit('edit', relatedTarget)
     },
     deleteLayer({ relatedTarget }) {
@@ -96,12 +98,12 @@ export default {
           this.$layerGroups[relatedTarget.featureType].removeLayer(
             relatedTarget
           )
-          if (relatedTarget.feature._id) this.deletFeatureFromDB(relatedTarget)
+          if (relatedTarget.feature._id) this.deleteFeatureFromDB(relatedTarget)
         },
         onCancel: () => {}
       })
     },
-    deletFeatureFromDB({ feature, featureType }) {
+    deleteFeatureFromDB({ feature, featureType }) {
       axios({
         method: 'delete',
         url: `${host}/collections/${featureType}/${feature._id}`
@@ -121,28 +123,39 @@ export default {
     }
   },
   mounted() {
+    // create a layer group for each schema
     this.schemas.schemas.forEach(schema => this.createLayerGroup(schema))
     this.features.features.forEach(feature =>
+      // add features to each layer group accordingly (by schema name)
       this.$layerGroups[`${feature.schema}`].addData(feature)
     )
     this.$map.on('draw:created', ({ layer }) => {
+      // add feature type and GeoJSON data to each layer on the map for ease of access
       if (!('feature' in layer)) {
         layer.featureType = ''
         layer.feature = layer.toGeoJSON()
       }
+      // then we add the layer to tha map
       this.$DrawLayer.addLayer(layer)
+      // emit an event to the viewer so it can take th necessary actions.
       this.$emit('newLayer', layer)
     })
 
-    this.$map.on('contextmenu.show', ({ contextmenu }) => {
-      if (!this.user.authenticated || contextmenu._items.length > 2)
-        this.$map.contextmenu.hide()
-    })
+    this.$map.on(
+      'contextmenu.show' /* on mouse right-click on the map*/,
+      ({ contextmenu }) => {
+        if (
+          !this.user.authenticated ||
+          contextmenu._items.length > 2 /* show only 2 menu items */
+        )
+          this.$map.contextmenu.hide()
+      }
+    )
 
     this.$map.on('click', () => {
       this.$map.contextmenu.hide()
     })
-
+    // filter-layer button click
     document.getElementById('filter-button').addEventListener('click', e => {
       this.$emit('filterLayers')
     })
