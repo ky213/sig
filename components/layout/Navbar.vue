@@ -60,6 +60,7 @@ export default {
   computed: mapState(['user']),
   methods: {
     openLogin() {
+      //show login form
       this.$modal.open({
         parent: this,
         component: LoginForm,

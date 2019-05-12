@@ -32,10 +32,3 @@
     </a-sub-menu> -->
   </a-menu>
 </template>
-
-<script>
-export default {}
-</script>
-
-<style>
-</style>

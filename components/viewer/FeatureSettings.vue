@@ -5,7 +5,7 @@
     class="card position-absolute bg-white p-3 rounded-1"
     style="height:600px;width:30%;top:200px;right:15px;z-index:400"
     @submit.prevent="onSubmit"
-    @reset="onReset"
+    @reset="onCancel"
   >
     <b-tabs v-model="activeTab">
       <b-tab-item :visible="mode==='create'">
@@ -103,11 +103,13 @@ export default {
       )
     },
     layerCopy() {
+      // keep a copy of the layer before edit, for history
       return { ...this.newLayer.feature }
     }
   },
   methods: {
     onTypeSelect(e) {
+      /* when user clicks an icon on the feature selector */
       this.newLayer.featureType = e.target.name
       this.selectedType = e.target.name
       this.activeTab = 1
@@ -127,13 +129,13 @@ export default {
       const layerId = this.newLayer.feature._id
 
       this.isLoading = true
-
+      // cast form data to JSON object
       for (const key in this.activeSchema.properties) {
         newProps[key] = formData.get(key)
       }
-
+      // set layers's GeoJSON data
       if (this.mode === 'create') this.newLayer.feature.properties = newProps
-
+      // update layer's GeoJSON data
       if (this.mode === 'edit')
         this.$store.commit('features/updateFeature', {
           layerId,
@@ -143,8 +145,10 @@ export default {
 
       this.saveFeature()
     },
-    onReset() {
+    onCancel() {
+      // remove new layer (no layer id)
       if (!this.newLayer.feature._id) this.$DrawLayer.removeLayer(this.newLayer)
+      // reset layer on edit mode
       if (this.mode === 'edit') {
         this.$layerGroups[this.layerCopy.schema].removeLayer(this.newLayer)
         this.$layerGroups[this.layerCopy.schema].addData(this.layerCopy)
@@ -202,6 +206,7 @@ export default {
         })
     },
     getPopup(props) {
+      /* generate popup content */
       let popup = ``
 
       for (const prop in props) {

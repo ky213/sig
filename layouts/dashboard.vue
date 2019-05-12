@@ -14,7 +14,7 @@ import Navbar from '~/components/layout/Navbar'
 import Body from '~/components/layout/Body'
 import Footer from '~/components/layout/Footer'
 import SideMenu from '~/components/dashboard/SideMenu'
-import jwt_decode from 'jwt-decode'
+
 
 export default {
   components: { Navbar, Body, Footer, SideMenu },
