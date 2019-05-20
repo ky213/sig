@@ -3,7 +3,7 @@
   <form
     ref="form"
     class="card position-absolute bg-white p-3 rounded-1"
-    style="height:600px;width:30%;top:200px;right:15px;z-index:400"
+    style="height:600px;width:30%;top:220px;right:15px;z-index:400"
     @submit.prevent="onSubmit"
     @reset="onCancel"
   >
@@ -59,13 +59,13 @@
     <footer class="card-footer bg-white">
       <button
         typ="submit"
-        :class="['button', 'is-info', 'is-medium', 'card-footer-item',{'is-loading':isLoading}]"
+        :class="['button', 'p-0', 'is-info', 'is-medium', 'card-footer-item',{'is-loading':isLoading}]"
         :disabled="mode=='create' && !selectedType"
       >
         Save
         <b-icon pack="fas" icon="cloud-upload-alt" class="ml-2" size="is-small"></b-icon>
       </button>
-      <button type="reset" class="button is-danger is-outlined is-medium card-footer-item">
+      <button type="reset" class="button is-danger is-outlined is-medium card-footer-item p-0">
         Cancel
         <b-icon pack="fas" icon="times" class="ml-2" size="is-small"></b-icon>
       </button>

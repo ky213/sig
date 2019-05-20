@@ -4,7 +4,7 @@
       <a class="navbar-item has-text-grey-darker" href="#">
         <b style="font-size:2em" class="is-danger">kharitaDZ</b>
       </a>
-      
+
       <a
         role="button"
         class="navbar-burger burger"
@@ -29,15 +29,17 @@
           <b-icon pack="fas" icon="map-marked-alt" style="margin-right:5px"/>Viewer
         </nuxt-link>
 
-        <nuxt-link v-if="user.roles.includes('ROLE_SIG_ADMIN')" class="navbar-item" to="/dashboard" >
+        <nuxt-link v-if="user.roles.includes('ROLE_SIG_ADMIN')" class="navbar-item" to="/dashboard">
           <b-icon pack="fas" icon="cog" style="margin-right:5px"/>Administration
         </nuxt-link>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons " @click="user.authenticated ? logout() : openLogin() ">
-            <a :class="['button', 'is-light', {'is-success':user.authenticated}] ">{{ user.authenticated ? 'Logout' : 'Login'}}</a>
+          <div class="buttons" @click="user.authenticated ? logout() : openLogin() ">
+            <a
+              :class="['button', 'is-light', {'is-success':user.authenticated}] "
+            >{{ user.authenticated ? 'Logout' : 'Login'}}</a>
           </div>
         </div>
       </div>
@@ -47,6 +49,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import jwt_decode from 'jwt-decode'
 import LoginForm from '../auth/LoginForm.vue'
 
 export default {
@@ -77,6 +80,12 @@ export default {
         }
       })
     }
+  },
+  mounted() {
+    const storedToken = localStorage.getItem('sigToken')
+
+    if (storedToken)
+      this.$store.commit('user/login', jwt_decode(storedToken).auth.split(','))
   }
 }
 </script>
